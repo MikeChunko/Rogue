@@ -6,4 +6,4 @@ Currently the only way to run the game is to clone the repository, install [pyth
 and execute ```engine.py```.
 
 # Licensing
-python-libtcod is distributed under the Simplified 2-clause FreeBSD license.
+python-libtcod is distributed under the [Simplified 2-clause FreeBSD license](https://github.com/MikeChunko/Rogue/blob/master/LICENSE.txt).
