@@ -1,6 +1,5 @@
-# File name: solutions_21-40.py
+# File name: engine.py
 # Author: Michael Chunko
-# Date created: 3/5/19
 # Python Version: 3.7
 
 # This file contains the main engine of the game
