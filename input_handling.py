@@ -1,3 +1,9 @@
+# File name: input_handling.py
+# Author: Michael Chunko
+# Python Version: 3.7
+
+# This file contains the functions to handle user input
+
 import tcod
 
 
