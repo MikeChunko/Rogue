@@ -1,15 +1,21 @@
+# File name: engine.py
+# Author: Michael Chunko
+# Python Version: 3.7
+
+# This file contains the functions used to render the screen
+
 import tcod
 
 
-def render_all(con, entitites, screen_width, screen_height):
-    for entity in entitites:
+def render_all(con, entities, screen_width, screen_height):
+    for entity in entities:
         draw_entity(con, entity)
 
     tcod.console_blit(con, 0, 0, screen_width, screen_height, 0, 0, 0)
 
 
-def clear_all(con, entitites):
-    for entity in entitites:
+def clear_all(con, entities):
+    for entity in entities:
         clear_entity(con, entity)
 
 
