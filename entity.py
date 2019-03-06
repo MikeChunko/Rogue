@@ -1,3 +1,9 @@
+# File name: entity.py
+# Author: Michael Chunko
+# Python Version: 3.7
+
+# This file contains the class representing entities
+
 import tcod
 
 
