@@ -21,10 +21,11 @@ class GameMap:
         """ Return a 2d array consisting of width x height Tile objects.
             The Tiles are set to be blocked by default. """
         tiles = [[Tile(True) for y in range(self.height)] for x in range(self.width)]
-        tiles[20][20].blocked = True
+
         return tiles
 
     def make_map(self, max_rooms, min_room_size, max_room_size, map_width, map_height, player):
+        """ Procedurally generate a map consisting of rooms and tunnels connecting them. """
         rooms = []
         room_count = 0
 
@@ -32,12 +33,14 @@ class GameMap:
             width = randint(min_room_size, max_room_size)
             height = randint(min_room_size, max_room_size)
 
+            # Make sure that the starting coordinates aren't outside the map
             x = randint(0, map_width - width - 1)
             y = randint(0, map_height - height - 1)
 
             new_room = Rectangle(x, y, width, height)
 
             for other in rooms:
+                # End if new_room intersects with any rooms
                 if new_room.intersect(other):
                     break
             else:
@@ -49,7 +52,7 @@ class GameMap:
                     player.x, player.y = new_room.center()
                 else:
                     # Not the first room
-                    prev_x, prev_y = rooms[room_count - 1].center()
+                    prev_x, prev_y = rooms[-1].center()
 
                     if randint(0, 1) == 1:
                         self.create_tunnel(prev_x, new_x, prev_y, 'h')
