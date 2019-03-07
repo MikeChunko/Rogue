@@ -4,12 +4,13 @@
 
 # This file contains the class representing a tile on a map
 
+
 class Tile:
     def __init__(self, blocked, block_sight=None):
         self.blocked = blocked
 
         # By default, a blocked tile also blocks sight
         if block_sight is None:
-            block_sight = blocked
+            self.block_sight = blocked
         else:
-            self.block_sight = block_sight
+            self.block_sight = blocked
