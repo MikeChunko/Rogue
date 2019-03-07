@@ -8,11 +8,19 @@ import tcod
 from input_handling import *
 from entity import *
 from render import *
+from map_objects.game_map import *
+
+colors = {
+    "dark wall": tcod.Color(0, 100, 0),
+    "dark ground": tcod.Color(50, 150, 50)
+}
 
 
 def main():
     screen_width = 80
     screen_height = 50
+    map_width = 80
+    map_height = 50
 
     # Initialize entities
     player = Entity(screen_width // 2, screen_height // 2, '@', tcod.white)
@@ -27,6 +35,9 @@ def main():
 
     con = tcod.console_new(screen_width, screen_height)
 
+    game_map = GameMap(map_width, map_height)
+    game_map.make_map()
+
     key = tcod.Key()
     mouse = tcod.Mouse()
 
@@ -38,7 +49,7 @@ def main():
         tcod.console_set_default_foreground(con, tcod.white)
 
         # Print the entities
-        render_all(con, entities, screen_width, screen_height)
+        render_all(con, entities, game_map, screen_width, screen_height)
 
         # Apply the updates on screen
         tcod.console_flush()
@@ -55,7 +66,8 @@ def main():
 
         if move:
             dx, dy = move
-            player.move(dx, dy)
+            if not game_map.is_blocked(player.x + dx, player.y + dy):
+                player.move(dx, dy)
 
         if exit:
             return True
