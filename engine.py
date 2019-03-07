@@ -10,6 +10,15 @@ from entity import *
 from render import *
 from map_objects.game_map import *
 
+screen_width = 80
+screen_height = 50
+map_width = 80
+map_height = 50
+
+max_room_size = 12
+min_room_size = 5
+max_rooms = 10
+
 colors = {
     "dark wall": tcod.Color(0, 100, 0),
     "dark ground": tcod.Color(50, 150, 50)
@@ -17,11 +26,6 @@ colors = {
 
 
 def main():
-    screen_width = 80
-    screen_height = 50
-    map_width = 80
-    map_height = 50
-
     # Initialize entities
     player = Entity(screen_width // 2, screen_height // 2, '@', tcod.white)
     npc = Entity(color=tcod.red)
@@ -36,7 +40,7 @@ def main():
     con = tcod.console_new(screen_width, screen_height)
 
     game_map = GameMap(map_width, map_height)
-    game_map.make_map()
+    game_map.make_map(max_rooms, min_room_size, max_room_size, map_width, map_height, player)
 
     key = tcod.Key()
     mouse = tcod.Mouse()
