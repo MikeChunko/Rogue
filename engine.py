@@ -4,24 +4,32 @@
 
 # This file contains the main engine of the game
 
-import tcod
 from input_handling import *
 from entity import *
 from render import *
 from map_objects.game_map import *
+from fov_functions import *
 
 screen_width = 80
 screen_height = 50
 map_width = 80
 map_height = 50
 
-max_room_size = 12
+max_room_size = 30
 min_room_size = 5
 max_rooms = 10
 
+# Permissive FOV algorithm
+fov_algorithm = 0
+fov_light_walls = True
+fov_radius = 30
+
 colors = {
-    "dark wall": tcod.Color(0, 100, 0),
-    "dark ground": tcod.Color(50, 150, 50)
+    "dark wall": tcod.Color(35, 70, 35),
+    "dark ground": tcod.Color(30, 60, 30),
+    "light wall": tcod.Color(0, 100, 0),
+    "light ground": tcod.Color(50, 150, 50),
+    "unseen": tcod.Color(30, 30, 60)
 }
 
 
@@ -45,15 +53,21 @@ def main():
     key = tcod.Key()
     mouse = tcod.Mouse()
 
+    # Determine whether or not the FOV needs to be recalculated
+    fov_recalculate = True
+    fov_map = initialize_fov(game_map)
+
     # Game loop
     while not tcod.console_is_window_closed():
         # Update key and mouse with the user inputs
         tcod.sys_check_for_event(tcod.EVENT_KEY_PRESS, key, mouse)
 
-        tcod.console_set_default_foreground(con, tcod.white)
+        if fov_recalculate:
+            calculate_fov(fov_map, player.x, player.y, fov_radius, fov_light_walls, fov_algorithm)
 
-        # Print the entities
-        render_all(con, entities, game_map, screen_width, screen_height)
+        # Render everything
+        render_all(con, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height)
+        fov_recalculate = False
 
         # Apply the updates on screen
         tcod.console_flush()
@@ -72,6 +86,7 @@ def main():
             dx, dy = move
             if not game_map.is_blocked(player.x + dx, player.y + dy):
                 player.move(dx, dy)
+                fov_recalculate = True
 
         if exit:
             return True
