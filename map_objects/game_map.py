@@ -4,12 +4,16 @@
 
 # This file contains the class representing the array of tiles that is the game map
 
+from tcod import *
 from map_objects.tile import *
 from map_objects.rectangle import Rectangle
+from entity import Entity
 from random import randint
 
-
 # Known Issue: if you somehow get out of the map, the game crashes
+
+rooms = []
+
 
 class GameMap:
     def __init__(self, width, height):
@@ -26,7 +30,7 @@ class GameMap:
 
     def make_map(self, max_rooms, min_room_size, max_room_size, map_width, map_height, player):
         """ Procedurally generate a map consisting of rooms and tunnels connecting them. """
-        rooms = []
+
         room_count = 0
 
         for r in range(max_rooms):
@@ -85,6 +89,17 @@ class GameMap:
             for y in range(min(start, end), max(start, end) + 1):
                 self.tiles[location][y].blocked = False
                 self.tiles[location][y].block_sight = False
+
+    def create_npcs(self, min_npcs, max_npcs, entities, char="#", color=tcod.red):
+        for i in range(0, randint(min_npcs, max_npcs)):
+            room_number = randint(0, len(rooms) - 1)
+            x = y = 0
+
+            while self.is_blocked(x, y):
+                x = randint(rooms[room_number].x1 + 1, rooms[room_number].x2 - 1, )
+                y = randint(rooms[room_number].y1 + 1, rooms[room_number].y2 - 1, )
+
+            entities.append(Entity(x, y, char, color))
 
     def is_blocked(self, x, y):
         return self.tiles[x][y].blocked

@@ -37,6 +37,8 @@ def main():
     npc = Entity(color=tcod.red)
     entities = [npc, player]
 
+    tcod.sys_set_fps(30)
+
     # Set the font to be used
     tcod.console_set_custom_font('terminal8x8_gs_as.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_ASCII_INCOL)
 
@@ -47,6 +49,7 @@ def main():
 
     game_map = GameMap(map_width, map_height)
     game_map.make_map(max_rooms, min_room_size, max_room_size, map_width, map_height, player)
+    game_map.create_npcs(min_npcs=10, max_npcs=20, entities=entities)
 
     key = tcod.Key()
     mouse = tcod.Mouse()
