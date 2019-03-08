@@ -5,7 +5,6 @@
 # This file contains the main engine of the game
 
 from input_handling import *
-from entity import *
 from render import *
 from map_objects.game_map import *
 from fov_functions import *
@@ -13,9 +12,10 @@ from fov_functions import *
 screen_width, screen_height = 100, 70
 map_width, map_height = screen_width, screen_height
 
-max_room_size = 25
-min_room_size = 5
+max_room_size, min_room_size = 25, 5
 max_rooms = 10
+
+min_npcs, max_npcs = 5, 15
 
 # Permissive FOV algorithm
 fov_algorithm = 0
@@ -30,6 +30,8 @@ colors = {
     "unseen": tcod.Color(30, 30, 60)
 }
 
+max_fps = 30
+
 
 def main():
     # Initialize entities
@@ -37,7 +39,8 @@ def main():
     npc = Entity(color=tcod.red)
     entities = [npc, player]
 
-    tcod.sys_set_fps(30)
+    # Limit the FPS
+    tcod.sys_set_fps(max_fps)
 
     # Set the font to be used
     tcod.console_set_custom_font('terminal8x8_gs_as.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_ASCII_INCOL)
@@ -47,9 +50,10 @@ def main():
 
     con = tcod.console_new(screen_width, screen_height)
 
+    # Generate all elements of the game map
     game_map = GameMap(map_width, map_height)
     game_map.make_map(max_rooms, min_room_size, max_room_size, map_width, map_height, player)
-    game_map.create_npcs(min_npcs=10, max_npcs=20, entities=entities)
+    game_map.create_npcs(min_npcs, max_npcs, entities, '#', tcod.Color(160, 10, 10))
 
     key = tcod.Key()
     mouse = tcod.Mouse()
