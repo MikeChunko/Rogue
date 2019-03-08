@@ -10,12 +10,10 @@ from render import *
 from map_objects.game_map import *
 from fov_functions import *
 
-screen_width = 80
-screen_height = 50
-map_width = 80
-map_height = 50
+screen_width, screen_height = 100, 70
+map_width, map_height = screen_width, screen_height
 
-max_room_size = 30
+max_room_size = 25
 min_room_size = 5
 max_rooms = 10
 
