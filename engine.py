@@ -53,7 +53,7 @@ def main():
     game_map = GameMap(map_width, map_height)
 
     # Initialize entities
-    player = Entity(game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white)
+    player = Entity(game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player", True)
     entities = [player]
 
     # Generate the rest of the game map

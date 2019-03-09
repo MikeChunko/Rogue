@@ -99,9 +99,9 @@ class GameMap:
                     y = randint(room.y1 + 1, room.y2 - 1)
 
                 if randint(0, 100) < 80:
-                    entities.append(Entity(self.tiles, x, y, "g", colors.get("goblin")))
+                    entities.append(Entity(self.tiles, x, y, "g", colors.get("goblin"), "goblin", True))
                 else:
-                    entities.append(Entity(self.tiles, x, y, "O", colors.get("orc")))
+                    entities.append(Entity(self.tiles, x, y, "O", colors.get("orc"), "orc", True))
 
     def is_blocked(self, x, y):
         return self.tiles[x][y].blocked
