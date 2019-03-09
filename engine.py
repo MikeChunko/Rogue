@@ -8,6 +8,8 @@ from input_handling import *
 from render import *
 from map_objects.game_map import *
 from fov_functions import *
+from game_states import GameStates
+import Entities.entity
 
 # Maximum supported values: Actual monitor width or height // 10
 screen_width, screen_height = 100, 70
@@ -25,8 +27,8 @@ fov_light_walls = True
 fov_radius = 30
 
 colors = {
-    "dark wall": tcod.Color(80, 30, 5),
-    "dark ground": tcod.Color(40, 20, 5),
+    "dark wall": tcod.Color(50, 20, 5),
+    "dark ground": tcod.Color(30, 15, 5),
     "light wall": tcod.Color(100, 50, 10),
     "light ground": tcod.Color(60, 25, 10),
     "unseen": tcod.Color(25, 25, 40),
@@ -60,8 +62,12 @@ def main():
     game_map.make_map(max_rooms, min_room_size, max_room_size, map_width, map_height, player)
     game_map.create_npcs(min_npcs, max_npcs, entities, colors)
 
+    # Initialize user input
     key = tcod.Key()
     mouse = tcod.Mouse()
+
+    # Initialize the game state
+    game_state = GameStates.PLAYER_TURN
 
     # Determine whether or not the FOV needs to be recalculated
     fov_recalculate = True
@@ -92,17 +98,23 @@ def main():
         exit = action.get("exit")
         fullscreen = action.get("fullscreen")
 
-        if move:
+        if move and game_state == GameStates.PLAYER_TURN:
             dx, dy = move
             if not game_map.is_blocked(player.x + dx, player.y + dy):
                 player.move(game_map.tiles, dx, dy)
                 fov_recalculate = True
+
+            game_state = GameStates.ENEMY_TURN
 
         if exit:
             return True
 
         if fullscreen:
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
+
+        if game_state == GameStates.ENEMY_TURN:
+            Entities.entity.entity_turn(entities)
+            game_state = GameStates.PLAYER_TURN
 
 
 if __name__ == "__main__":
