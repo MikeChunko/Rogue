@@ -6,7 +6,7 @@
 
 from map_objects.tile import *
 from map_objects.rectangle import Rectangle
-from entity import Entity
+from Entities.entity import Entity
 from random import randint
 
 # Known Issue: if you somehow get out of the map, the game crashes
