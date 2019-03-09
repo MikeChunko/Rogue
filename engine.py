@@ -9,7 +9,8 @@ from render import *
 from map_objects.game_map import *
 from fov_functions import *
 from game_states import GameStates
-import entities.entity
+import entities.entity as enty
+from entities.attacker import Attacker
 
 # Maximum supported values: Actual monitor width or height // 10
 screen_width, screen_height = 100, 70
@@ -36,6 +37,8 @@ colors = {
     "orc": tcod.Color(10, 130, 80),
 }
 
+entities = []
+
 max_fps = 30
 
 
@@ -55,8 +58,9 @@ def main():
     game_map = GameMap(map_width, map_height)
 
     # Initialize entities
-    player = Entity(game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player", True)
-    entities = [player]
+    player = Attacker(10, 1, 2, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player", True,
+                      False)
+    entities.append(player)
 
     # Generate the rest of the game map
     game_map.make_map(max_rooms, min_room_size, max_room_size, map_width, map_height, player)
@@ -113,7 +117,7 @@ def main():
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
 
         if game_state == GameStates.ENEMY_TURN:
-            entities.entity.entity_turn(entities)
+            enty.entity_turn(entities, fov_map, game_map)
             game_state = GameStates.PLAYER_TURN
 
 

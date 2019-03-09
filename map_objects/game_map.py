@@ -7,11 +7,17 @@
 from map_objects.tile import *
 from map_objects.rectangle import Rectangle
 from entities.entity import Entity
+from entities.attacker import Attacker
 from random import randint
 
 # Known Issue: if you somehow get out of the map, the game crashes
 
 rooms = []
+
+monster_stats = {
+    "orc": (8, 1, 3),
+    "goblin": (3, 0, 1)
+}
 
 
 class GameMap:
@@ -99,9 +105,13 @@ class GameMap:
                     y = randint(room.y1 + 1, room.y2 - 1)
 
                 if randint(0, 100) < 80:
-                    entities.append(Entity(self.tiles, x, y, "g", colors.get("goblin"), "goblin", True))
+                    hp, defense, power = monster_stats.get("goblin")
+                    entities.append(
+                        Attacker(hp, defense, power, self.tiles, x, y, "g", colors.get("goblin"), "goblin", True))
                 else:
-                    entities.append(Entity(self.tiles, x, y, "O", colors.get("orc"), "orc", True))
+                    hp, defense, power = monster_stats.get("orc")
+                    entities.append(
+                        Attacker(hp, defense, power, self.tiles, x, y, "O", colors.get("orc"), "orc", True))
 
     def is_blocked(self, x, y):
         return self.tiles[x][y].blocked
