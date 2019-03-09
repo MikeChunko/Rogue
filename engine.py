@@ -9,13 +9,15 @@ from render import *
 from map_objects.game_map import *
 from fov_functions import *
 
+# Maximum supported values: Actual monitor width or height // 10
 screen_width, screen_height = 100, 70
 map_width, map_height = screen_width, screen_height
 
 max_room_size, min_room_size = 25, 5
 max_rooms = 15
 
-min_npcs, max_npcs = 10, 20
+# Minimum and maximum NPCs that can be generated per room
+min_npcs, max_npcs = 1, 5
 
 # Permissive FOV algorithm
 fov_algorithm = 0
@@ -36,7 +38,6 @@ max_fps = 30
 
 
 def main():
-
     # Limit the FPS
     tcod.sys_set_fps(max_fps)
 
