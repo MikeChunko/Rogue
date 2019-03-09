@@ -1,3 +1,9 @@
+# File name: fov_functions
+# Author: Michael Chunko
+# Python Version: 3.7
+
+# This file contains various functions used in implementing field of view for the player
+
 import tcod
 
 

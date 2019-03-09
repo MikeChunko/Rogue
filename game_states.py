@@ -1,3 +1,9 @@
+# File name: game_states.py
+# Author: Michael Chunko
+# Python Version: 3.7
+
+# This file contains the class representing the possible game states
+
 from enum import Enum
 
 

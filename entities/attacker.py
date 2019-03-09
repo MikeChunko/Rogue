@@ -3,7 +3,7 @@
 # Python Version: 3.7
 
 # This file contains the entity subclass representing those capable of attacking
-from Entities.entity import Entity
+from entities.entity import Entity
 import tcod
 
 

@@ -9,7 +9,7 @@ from render import *
 from map_objects.game_map import *
 from fov_functions import *
 from game_states import GameStates
-import Entities.entity
+import entities.entity
 
 # Maximum supported values: Actual monitor width or height // 10
 screen_width, screen_height = 100, 70
@@ -113,7 +113,7 @@ def main():
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
 
         if game_state == GameStates.ENEMY_TURN:
-            Entities.entity.entity_turn(entities)
+            entities.entity.entity_turn(entities)
             game_state = GameStates.PLAYER_TURN
 
 
