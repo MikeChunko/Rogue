@@ -4,7 +4,6 @@
 
 # This file contains the class representing the array of tiles that is the game map
 
-from tcod import *
 from map_objects.tile import *
 from map_objects.rectangle import Rectangle
 from entity import Entity
@@ -90,7 +89,7 @@ class GameMap:
                 self.tiles[location][y].blocked = False
                 self.tiles[location][y].block_sight = False
 
-    def create_npcs(self, min_npcs, max_npcs, entities, char="#", color=tcod.red):
+    def create_npcs(self, min_npcs, max_npcs, entities, colors):
         for i in range(0, randint(min_npcs, max_npcs)):
             room_number = randint(0, len(rooms) - 1)
             x = y = 0
@@ -99,7 +98,10 @@ class GameMap:
                 x = randint(rooms[room_number].x1 + 1, rooms[room_number].x2 - 1, )
                 y = randint(rooms[room_number].y1 + 1, rooms[room_number].y2 - 1, )
 
-            entities.append(Entity(x, y, char, color))
+            if randint(0, 100) < 80:
+                entities.append(Entity(self.tiles, x, y, "g", colors.get("goblin")))
+            else:
+                entities.append(Entity(self.tiles, x, y, "O", colors.get("orc")))
 
     def is_blocked(self, x, y):
         return self.tiles[x][y].blocked

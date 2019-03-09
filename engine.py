@@ -13,9 +13,9 @@ screen_width, screen_height = 100, 70
 map_width, map_height = screen_width, screen_height
 
 max_room_size, min_room_size = 25, 5
-max_rooms = 10
+max_rooms = 15
 
-min_npcs, max_npcs = 5, 15
+min_npcs, max_npcs = 10, 20
 
 # Permissive FOV algorithm
 fov_algorithm = 0
@@ -23,21 +23,19 @@ fov_light_walls = True
 fov_radius = 30
 
 colors = {
-    "dark wall": tcod.Color(35, 70, 35),
-    "dark ground": tcod.Color(30, 60, 30),
-    "light wall": tcod.Color(0, 100, 0),
-    "light ground": tcod.Color(50, 150, 50),
-    "unseen": tcod.Color(30, 30, 60)
+    "dark wall": tcod.Color(80, 30, 5),
+    "dark ground": tcod.Color(40, 20, 5),
+    "light wall": tcod.Color(100, 50, 10),
+    "light ground": tcod.Color(60, 25, 10),
+    "unseen": tcod.Color(25, 25, 40),
+    "goblin": tcod.Color(10, 150, 10),
+    "orc": tcod.Color(10, 130, 80),
 }
 
 max_fps = 30
 
 
 def main():
-    # Initialize entities
-    player = Entity(screen_width // 2, screen_height // 2, '@', tcod.white)
-    npc = Entity(color=tcod.red)
-    entities = [npc, player]
 
     # Limit the FPS
     tcod.sys_set_fps(max_fps)
@@ -50,10 +48,16 @@ def main():
 
     con = tcod.console_new(screen_width, screen_height)
 
-    # Generate all elements of the game map
+    # Generate the tile map
     game_map = GameMap(map_width, map_height)
+
+    # Initialize entities
+    player = Entity(game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white)
+    entities = [player]
+
+    # Generate the rest of the game map
     game_map.make_map(max_rooms, min_room_size, max_room_size, map_width, map_height, player)
-    game_map.create_npcs(min_npcs, max_npcs, entities, '#', tcod.Color(160, 10, 10))
+    game_map.create_npcs(min_npcs, max_npcs, entities, colors)
 
     key = tcod.Key()
     mouse = tcod.Mouse()
@@ -90,7 +94,7 @@ def main():
         if move:
             dx, dy = move
             if not game_map.is_blocked(player.x + dx, player.y + dy):
-                player.move(dx, dy)
+                player.move(game_map.tiles, dx, dy)
                 fov_recalculate = True
 
         if exit:
