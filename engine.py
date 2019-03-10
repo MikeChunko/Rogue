@@ -5,8 +5,9 @@
 # This file contains the main engine of the game
 
 from input_handling import *
-from render import *
-from map_objects.game_map import *
+from render import render_all, clear_all
+from map_objects.game_map import GameMap
+from generate import generate_all
 from fov_functions import *
 from game_states import GameStates
 import entities.entity as enty
@@ -20,7 +21,7 @@ min_room_size, max_room_size = 10, 25
 max_rooms = 15
 
 # Minimum and maximum NPCs that can be generated per room
-min_npcs, max_npcs = 50, 80
+min_npcs, max_npcs = 1, 6
 
 # Permissive FOV algorithm
 fov_algorithm = 0
@@ -63,8 +64,8 @@ def main():
     entities.append(player)
 
     # Generate the rest of the game map
-    game_map.make_map(max_rooms, min_room_size, max_room_size, map_width, map_height, entities)
-    game_map.create_npcs(min_npcs, max_npcs, entities, colors)
+    generate_all(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs, max_npcs, colors,
+                 entities)
 
     # Initialize user input
     key = tcod.Key()

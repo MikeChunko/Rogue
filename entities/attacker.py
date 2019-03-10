@@ -14,8 +14,6 @@ class Attacker(Entity):
         self.hp = hp
         self.defense = defense
         self.power = power
-        if name == "player":
-            print(tiles[x][y].blocked)
 
     def take_turn(self, entities, fov_map, game_map):
         """ The entity takes their turn in the game. """

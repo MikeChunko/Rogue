@@ -34,19 +34,10 @@ class Entity:
         self.x = new_x
         self.y = new_y
 
-    def take_turn(self, entities, fov_map, game_map):
-        """ The entity takes their turn in the game. """
-        player = entities[0]
-        if self.moves and (tcod.map_is_in_fov(fov_map, self.x, self.y) or self.distance_to(player) <= 5):
-            self.move_towards(player.x, player.y, game_map)
-        else:
-            print(self.name + " does nothing")
-
     def move_towards(self, target_x, target_y, game_map):
         distance = math.sqrt((target_x - self.x) ** 2 + (target_y - self.y) ** 2)
         dx = int(round((target_x - self.x) / distance))
         dy = int(round((target_y - self.y) / distance))
-        print(dx, dy, distance)
 
         if not game_map.is_blocked(self.x + dx, self.y) and not game_map.is_blocked(self.x, self.y + dy):
             if dx > dy:
@@ -57,6 +48,14 @@ class Entity:
             self.move(game_map.tiles, dx, 0)
         elif not game_map.is_blocked(self.x, self.y + dy):
             self.move(game_map.tiles, 0, dy)
+
+    def take_turn(self, entities, fov_map, game_map):
+        """ The entity takes their turn in the game. """
+        player = entities[0]
+        if self.moves and (tcod.map_is_in_fov(fov_map, self.x, self.y) or self.distance_to(player) <= 5):
+            self.move_towards(player.x, player.y, game_map)
+        else:
+            print(self.name + " does nothing")
 
     def distance_to(self, other):
         return math.sqrt((other.x - self.x) ** 2 + (other.y - self.y) ** 2)
@@ -74,5 +73,6 @@ def get_entity_at_location(x, y, entities):
 
 def entity_turn(entities, fov_map, game_map):
     """ Make all entities in entities take their turn. """
-    for enty in entities:
+    # Player should not run take turn
+    for enty in entities[1:]:
         enty.take_turn(entities, fov_map, game_map)
