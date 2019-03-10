@@ -5,7 +5,7 @@
 # This file contains the main engine of the game
 
 from input_handling import *
-from render import render_all, clear_all
+from render import *
 from map_objects.game_map import GameMap
 from generate import generate_all
 from fov_functions import *
