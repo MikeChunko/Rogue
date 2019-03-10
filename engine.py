@@ -16,11 +16,11 @@ from entities.attacker import Attacker
 screen_width, screen_height = 100, 70
 map_width, map_height = screen_width, screen_height
 
-max_room_size, min_room_size = 25, 5
+min_room_size, max_room_size = 10, 25
 max_rooms = 15
 
 # Minimum and maximum NPCs that can be generated per room
-min_npcs, max_npcs = 1, 5
+min_npcs, max_npcs = 50, 80
 
 # Permissive FOV algorithm
 fov_algorithm = 0
@@ -63,7 +63,7 @@ def main():
     entities.append(player)
 
     # Generate the rest of the game map
-    game_map.make_map(max_rooms, min_room_size, max_room_size, map_width, map_height, player)
+    game_map.make_map(max_rooms, min_room_size, max_room_size, map_width, map_height, entities)
     game_map.create_npcs(min_npcs, max_npcs, entities, colors)
 
     # Initialize user input

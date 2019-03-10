@@ -9,7 +9,7 @@ import tcod
 
 
 class Entity:
-    def __init__(self, tiles, x=1, y=1, char='#', color=tcod.white, name="none", blocks=False, moves=True):
+    def __init__(self, tiles, x=1, y=1, char='#', color=tcod.white, name="none", blocks=True, moves=True):
         self.x = x
         self.y = y
         self.char = char
@@ -18,16 +18,21 @@ class Entity:
         self.blocks = blocks
         if self.blocks:
             tiles[self.x][self.y].blocked = True
-
         self.moves = moves
 
     def move(self, tiles, dx, dy):
-        if self.blocks:
-            tiles[self.x][self.y].blocked = False
         self.x += dx
         self.y += dy
         if self.blocks:
+            tiles[self.x - dx][self.y - dy].blocked = False
             tiles[self.x][self.y].blocked = True
+
+    def move_to(self, tiles, new_x, new_y):
+        if self.blocks:
+            tiles[self.x][self.y].blocked = False
+            tiles[new_x][new_y].blocked = True
+        self.x = new_x
+        self.y = new_y
 
     def take_turn(self, entities, fov_map, game_map):
         """ The entity takes their turn in the game. """
@@ -37,10 +42,11 @@ class Entity:
         else:
             print(self.name + " does nothing")
 
-    def move_towards(self, target_x, target_y, game_map, ):
+    def move_towards(self, target_x, target_y, game_map):
         distance = math.sqrt((target_x - self.x) ** 2 + (target_y - self.y) ** 2)
         dx = int(round((target_x - self.x) / distance))
         dy = int(round((target_y - self.y) / distance))
+        print(dx, dy, distance)
 
         if not game_map.is_blocked(self.x + dx, self.y) and not game_map.is_blocked(self.x, self.y + dy):
             if dx > dy:
@@ -68,5 +74,5 @@ def get_entity_at_location(x, y, entities):
 
 def entity_turn(entities, fov_map, game_map):
     """ Make all entities in entities take their turn. """
-    for entity in entities:
-        entity.take_turn(entities, fov_map, game_map)
+    for enty in entities:
+        enty.take_turn(entities, fov_map, game_map)
