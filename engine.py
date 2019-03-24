@@ -59,7 +59,7 @@ def main():
     game_map = GameMap(map_width, map_height)
 
     # Initialize the player and the entities list
-    player = Attacker(10, 1, 2, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player", True,
+    player = Attacker(10, 0, 2, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player", True,
                       False)
     entities.append(player)
 
@@ -108,6 +108,11 @@ def main():
             if not game_map.is_blocked(player.x + dx, player.y + dy):
                 player.move(game_map.tiles, dx, dy)
                 fov_recalculate = True
+
+            target = enty.get_entity_at_location(player.x + dx, player.y + dy, entities)
+
+            if target != -1:
+                player.attack(target)
 
             game_state = GameStates.ENEMY_TURN
 

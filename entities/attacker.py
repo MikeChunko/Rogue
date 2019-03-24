@@ -25,5 +25,15 @@ class Attacker(Entity):
         elif self.moves and (tcod.map_is_in_fov(fov_map, self.x, self.y) or distance <= 7):
             self.move_towards(player.x, player.y, game_map)
 
+    def take_damage(self, damage):
+        self.hp -= damage
+
     def attack(self, target):
-        print(target.name + " is attacked by a vicious " + self.name)
+        damage = self.power - target.defense
+
+        if damage > 0:
+            target.take_damage(damage)
+            print("{0} attacks {1} for {2} damage, leaving them at {3} hp".format(self.name.capitalize(), target.name,
+                                                                                  damage, target.hp))
+        else:
+            print(self.name, "attacks, but deals no damage")

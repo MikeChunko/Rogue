@@ -11,8 +11,9 @@ from random import randint
 
 rooms = []
 
+# (hp, defense, power
 monster_stats = {
-    "orc": (8, 1, 3),
+    "orc": (5, 1, 2),
     "goblin": (3, 0, 1)
 }
 
