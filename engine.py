@@ -32,8 +32,8 @@ colors = {
     "dark wall": tcod.Color(50, 20, 5),
     "dark ground": tcod.Color(30, 15, 5),
     "light wall": tcod.Color(100, 50, 10),
-    "light ground": tcod.Color(60, 25, 10),
-    "unseen": tcod.Color(25, 25, 40),
+    "light ground": tcod.Color(55, 25, 10),
+    "unseen": tcod.Color(20, 20, 30),
     "goblin": tcod.Color(10, 150, 10),
     "orc": tcod.Color(10, 130, 80),
 }
@@ -58,7 +58,7 @@ def main():
     # Generate the tile map
     game_map = GameMap(map_width, map_height)
 
-    # Initialize entities
+    # Initialize the player and the entities list
     player = Attacker(10, 1, 2, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player", True,
                       False)
     entities.append(player)

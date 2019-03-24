@@ -8,14 +8,17 @@ import tcod
 
 
 def handle_keys(key):
+    # Fetch the character pressed
+    key_char = chr(key.c)
+
     # Movement keys
-    if key.vk == tcod.KEY_RIGHT:
+    if key.vk == tcod.KEY_RIGHT or key_char == 'd':
         return {"move": (1, 0)}
-    elif key.vk == tcod.KEY_LEFT:
+    elif key.vk == tcod.KEY_LEFT or key_char == 'a':
         return {"move": (-1, 0)}
-    elif key.vk == tcod.KEY_UP:
+    elif key.vk == tcod.KEY_UP or key_char == 'w':
         return {"move": (0, -1)}
-    elif key.vk == tcod.KEY_DOWN:
+    elif key.vk == tcod.KEY_DOWN or key_char == 's':
         return {"move": (0, 1)}
 
     # Other keys
