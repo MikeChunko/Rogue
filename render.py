@@ -36,6 +36,14 @@ def render_all(con, entities, game_map, fov_map, fov_recalculate, screen_width, 
     for entity in entities:
         draw_entity(con, entity, fov_map)
 
+    tcod.console_set_default_foreground(con, tcod.white)
+    tcod.console_print_ex(con, 1, screen_height - 4, tcod.BKGND_NONE, tcod.LEFT,
+                          "PWR: {0}".format(entities[0].power))
+    tcod.console_print_ex(con, 1, screen_height - 3, tcod.BKGND_NONE, tcod.LEFT,
+                          "DEF: {0}".format(entities[0].defense))
+    tcod.console_print_ex(con, 1, screen_height - 2, tcod.BKGND_NONE, tcod.LEFT,
+                          "HP : {0:02}/{1:02}".format(entities[0].hp, entities[0].max_hp))
+
     tcod.console_blit(con, 0, 0, screen_width, screen_height, 0, 0, 0)
 
 
