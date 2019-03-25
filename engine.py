@@ -11,7 +11,7 @@ from generate import generate_all
 from fov_functions import *
 from game_states import GameStates
 import entities.entity as enty
-from entities.attacker import Attacker
+from entities.player import Player
 
 # Maximum supported values: Actual monitor width or height // 10
 screen_width, screen_height = 100, 70
@@ -59,8 +59,7 @@ def main():
     game_map = GameMap(map_width, map_height)
 
     # Initialize the player and the entities list
-    player = Attacker(10, 0, 2, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player", True,
-                      False)
+    player = Player(10, 0, 2, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player", True)
     entities.append(player)
 
     # Generate the rest of the game map
@@ -141,11 +140,7 @@ def main():
                 dead = result.get("dead")
 
                 if dead:
-                    # TODO: Improve player death
-                    game_state = GameStates.GAME_OVER
-                    print("\n\nYou have died\n\nGAME\nOVER")
-                    entities[0].char = "%"
-                    entities[0].color = tcod.Color(150, 0, 0)
+                    game_state = player.kill(game_map.tiles)
                     break
             print()
 
