@@ -39,8 +39,20 @@ class Entity:
     def move_towards(self, target_x, target_y, game_map):
         """ Move the entity 1 tile towards the target. """
         distance = math.sqrt((target_x - self.x) ** 2 + (target_y - self.y) ** 2)
-        dx = int(round((target_x - self.x) / distance))
-        dy = int(round((target_y - self.y) / distance))
+        dx = round((target_x - self.x) / distance)
+        dy = round((target_y - self.y) / distance)
+
+        if dx == 0:
+            if target_x - self.x > 0:
+                dx = 1
+            elif target_x - self.x < 0:
+                dx = -1
+
+        if dy == 0:
+            if target_y - self.y > 0:
+                dy = 1
+            elif target_y - self.y < 0:
+                dy = -1
 
         if not game_map.is_blocked(self.x + dx, self.y) and not game_map.is_blocked(self.x, self.y + dy):
             if dx > dy:

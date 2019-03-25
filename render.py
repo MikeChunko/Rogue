@@ -8,13 +8,13 @@ import tcod
 from engine import colors
 
 
-def render_all(con, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height):
+def render_all(con, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height, ignore_fov=False):
     # Draw the map
-    draw_map(con, game_map, fov_map, fov_recalculate)
+    draw_map(con, game_map, fov_map, fov_recalculate, ignore_fov)
 
     # Draw all entities
     for entity in entities:
-        draw_entity(con, entity, fov_map)
+        draw_entity(con, entity, fov_map, ignore_fov)
 
     # Draw the player stats
     tcod.console_set_default_foreground(con, tcod.white)
@@ -33,7 +33,7 @@ def clear_all(con, entities):
         clear_entity(con, entity)
 
 
-def draw_map(con, game_map, fov_map, fov_recalculate):
+def draw_map(con, game_map, fov_map, fov_recalculate, ignore_fov=False):
     if fov_recalculate:
         for y in range(game_map.height):
             for x in range(game_map.width):
@@ -41,7 +41,7 @@ def draw_map(con, game_map, fov_map, fov_recalculate):
                 wall = game_map.tiles[x][y].block_sight
 
                 # The tile is in the FOV
-                if visible:
+                if ignore_fov or visible:
                     # Update the tile to be seen
                     game_map.tiles[x][y].seen = True
                     if wall:
@@ -57,8 +57,8 @@ def draw_map(con, game_map, fov_map, fov_recalculate):
                         tcod.console_set_char_background(con, x, y, colors.get("dark ground"), tcod.BKGND_SET)
 
 
-def draw_entity(con, entity, fov_map):
-    if tcod.map_is_in_fov(fov_map, entity.x, entity.y):
+def draw_entity(con, entity, fov_map, ignore_fov=False):
+    if ignore_fov or tcod.map_is_in_fov(fov_map, entity.x, entity.y):
         tcod.console_set_default_foreground(con, entity.color)
         tcod.console_put_char(con, entity.x, entity.y, entity.char, tcod.BKGND_NONE)
 

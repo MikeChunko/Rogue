@@ -42,6 +42,9 @@ entities = []
 
 max_fps = 30
 
+# Starts the game with several debug features when True
+debug = True
+
 
 def main():
     # Limit the FPS
@@ -86,7 +89,7 @@ def main():
             calculate_fov(fov_map, player.x, player.y, fov_radius, fov_light_walls, fov_algorithm)
 
         # Render everything
-        render_all(con, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height)
+        render_all(con, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height, debug)
         fov_recalculate = False
 
         # Apply the updates on screen
