@@ -49,6 +49,10 @@ class Entity:
         elif not game_map.is_blocked(self.x, self.y + dy):
             self.move(game_map.tiles, 0, dy)
 
+    def kill(self, tiles):
+        if self.blocks:
+            tiles[self.x][self.y].blocked = False
+
     def take_turn(self, entities, fov_map, game_map):
         """ The entity takes their turn in the game. """
         player = entities[0]
@@ -59,6 +63,9 @@ class Entity:
 
     def distance_to(self, other):
         return math.sqrt((other.x - self.x) ** 2 + (other.y - self.y) ** 2)
+
+    def __repr__(self):
+        return "{0}: x = {1}, y = {2}".format(self.name, self.x, self.y)
 
 
 def get_entity_at_location(x, y, entities):
@@ -73,6 +80,13 @@ def get_entity_at_location(x, y, entities):
 
 def entity_turn(entities, fov_map, game_map):
     """ Make all entities in entities take their turn. """
-    # Player should not run take turn
+    turn_results = []
+
+    # Player turn should not be calculated
     for enty in entities[1:]:
-        enty.take_turn(entities, fov_map, game_map)
+        result = enty.take_turn(entities, fov_map, game_map)
+
+        if result is not None:
+            turn_results.extend(result)
+
+    return turn_results

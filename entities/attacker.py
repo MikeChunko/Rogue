@@ -18,22 +18,33 @@ class Attacker(Entity):
 
     def take_turn(self, entities, fov_map, game_map):
         """ The entity takes their turn in the game. """
+        result = {}
         player = entities[0]
         distance = self.distance_to(player)
         if distance <= 1:
-            self.attack(player)
+            result = self.attack(player)
         elif self.moves and (tcod.map_is_in_fov(fov_map, self.x, self.y) or distance <= 7):
             self.move_towards(player.x, player.y, game_map)
 
+        return result
+
     def take_damage(self, damage):
         self.hp -= damage
+
+        if self.hp <= 0:
+            return [{"dead": self}]
+        else:
+            return [{"alive": self}]
 
     def attack(self, target):
         damage = self.power - target.defense
 
         if damage > 0:
-            target.take_damage(damage)
             print("{0} attacks {1} for {2} damage, leaving them at {3} hp".format(self.name.capitalize(), target.name,
-                                                                                  damage, target.hp))
+                                                                                  damage, target.hp - damage))
+            return target.take_damage(damage)
         else:
             print(self.name, "attacks, but deals no damage")
+
+    def __repr__(self):
+        return "{0}: hp = {1}, defense = {2}, power = {3}".format(self.name, self.hp, self.defense, self.power)

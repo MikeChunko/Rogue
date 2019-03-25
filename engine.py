@@ -103,6 +103,8 @@ def main():
         exit = action.get("exit")
         fullscreen = action.get("fullscreen")
 
+        player_turn_results = []
+
         if move and game_state == GameStates.PLAYER_TURN:
             dx, dy = move
             if not game_map.is_blocked(player.x + dx, player.y + dy):
@@ -112,7 +114,7 @@ def main():
             target = enty.get_entity_at_location(player.x + dx, player.y + dy, entities)
 
             if target != -1:
-                player.attack(target)
+                player_turn_results.extend(player.attack(target))
 
             game_state = GameStates.ENEMY_TURN
 
@@ -122,9 +124,27 @@ def main():
         if fullscreen:
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
 
+        # Handle the player turn results
+        for result in player_turn_results:
+            dead_entity = result.get("dead")
+
+            if dead_entity:
+                print("You have killed the {0}".format(dead_entity.name))
+                dead_entity.kill(game_map.tiles)
+                entities.remove(dead_entity)
+
         if game_state == GameStates.ENEMY_TURN:
-            enty.entity_turn(entities, fov_map, game_map)
+            enemy_turn_results = enty.entity_turn(entities, fov_map, game_map)
             game_state = GameStates.PLAYER_TURN
+
+            for result in enemy_turn_results:
+                dead = result.get("dead")
+
+                if dead:
+                    game_state = GameStates.GAME_OVER
+                    print("\n\nYou have died\n\nGAME\nOVER")
+                    break
+            print()
 
 
 if __name__ == "__main__":
