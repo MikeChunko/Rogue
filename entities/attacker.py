@@ -33,8 +33,8 @@ class Attacker(Entity):
 
         if self.hp <= 0:
             return [{"dead": self}]
-        else:
-            return [{"alive": self}]
+
+        return []
 
     def attack(self, target):
         damage = self.power - target.defense

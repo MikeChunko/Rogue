@@ -21,6 +21,7 @@ class Entity:
         self.moves = moves
 
     def move(self, tiles, dx, dy):
+        """ Move the entity to the location (x + dx, x + dy). """
         self.x += dx
         self.y += dy
         if self.blocks:
@@ -28,6 +29,7 @@ class Entity:
             tiles[self.x][self.y].blocked = True
 
     def move_to(self, tiles, new_x, new_y):
+        """ Move the entity directly to the location (new_x, new_y). """
         if self.blocks:
             tiles[self.x][self.y].blocked = False
             tiles[new_x][new_y].blocked = True
@@ -35,6 +37,7 @@ class Entity:
         self.y = new_y
 
     def move_towards(self, target_x, target_y, game_map):
+        """ Move the entity 1 tile towards the target. """
         distance = math.sqrt((target_x - self.x) ** 2 + (target_y - self.y) ** 2)
         dx = int(round((target_x - self.x) / distance))
         dy = int(round((target_y - self.y) / distance))
@@ -50,6 +53,7 @@ class Entity:
             self.move(game_map.tiles, 0, dy)
 
     def kill(self, tiles):
+        """ Do any necessary preparations to cleanly remove the entity from the game. """
         if self.blocks:
             tiles[self.x][self.y].blocked = False
 

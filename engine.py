@@ -141,8 +141,11 @@ def main():
                 dead = result.get("dead")
 
                 if dead:
+                    # TODO: Improve player death
                     game_state = GameStates.GAME_OVER
                     print("\n\nYou have died\n\nGAME\nOVER")
+                    entities[0].char = "%"
+                    entities[0].color = tcod.Color(150, 0, 0)
                     break
             print()
 
