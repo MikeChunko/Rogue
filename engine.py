@@ -21,7 +21,7 @@ min_room_size, max_room_size = 10, 25
 max_rooms = 15
 
 # Minimum and maximum NPCs that can be generated per room
-min_npcs, max_npcs = 1, 6
+min_npcs, max_npcs = 1, 5
 
 # Permissive FOV algorithm
 fov_algorithm = 0
