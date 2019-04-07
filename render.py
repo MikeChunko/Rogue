@@ -8,7 +8,8 @@ import tcod
 from engine import colors
 
 
-def render_all(con, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height, ignore_fov=False):
+def render_all(con, panel, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height, bar_width,
+               panel_height, panel_y, ignore_fov=False):
     # Draw the map
     draw_map(con, game_map, fov_map, fov_recalculate, ignore_fov)
 
@@ -16,16 +17,13 @@ def render_all(con, entities, game_map, fov_map, fov_recalculate, screen_width, 
     for entity in entities:
         draw_entity(con, entity, fov_map, ignore_fov)
 
-    # Draw the player stats
-    tcod.console_set_default_foreground(con, tcod.white)
-    tcod.console_print_ex(con, 1, screen_height - 4, tcod.BKGND_NONE, tcod.LEFT,
-                          "PWR: {0}".format(entities[0].power))
-    tcod.console_print_ex(con, 1, screen_height - 3, tcod.BKGND_NONE, tcod.LEFT,
-                          "DEF: {0}".format(entities[0].defense))
-    tcod.console_print_ex(con, 1, screen_height - 2, tcod.BKGND_NONE, tcod.LEFT,
-                          "HP : {0:02}/{1:02}".format(entities[0].hp, entities[0].max_hp))
-
     tcod.console_blit(con, 0, 0, screen_width, screen_height, 0, 0, 0)
+
+    # Draw the player stats
+    tcod.console_set_default_background(panel, tcod.black)
+    tcod.console_clear(panel)
+    render_bar(panel, 1, 1, bar_width, "HP", entities[0].hp, entities[0].max_hp, tcod.red, tcod.darker_red)
+    tcod.console_blit(panel, 0, 0, screen_width, panel_height, 0, 0, panel_y)
 
 
 def clear_all(con, entities):
@@ -65,3 +63,19 @@ def draw_entity(con, entity, fov_map, ignore_fov=False):
 
 def clear_entity(con, entity):
     tcod.console_put_char(con, entity.x, entity.y, ' ', tcod.BKGND_NONE)
+
+
+def render_bar(panel, x, y, total_width, name, value, maximum, foreground_color, background_color):
+    bar_width = int((value / maximum) * total_width)
+
+    # Going to be honest, don't know why it has to be done this way
+    tcod.console_set_default_background(panel, background_color)
+    tcod.console_rect(panel, x, y, total_width, 1, False, tcod.BKGND_SCREEN)
+    tcod.console_set_default_background(panel, foreground_color)
+
+    if bar_width > 0:
+        tcod.console_rect(panel, x, y, bar_width, 1, False, tcod.BKGND_SCREEN)
+
+    tcod.console_set_default_foreground(panel, tcod.white)
+    tcod.console_print_ex(panel, int(x + total_width / 2), y, tcod.BKGND_NONE, tcod.CENTER,
+                          "{0}: {1}/{2}".format(name, value, maximum))

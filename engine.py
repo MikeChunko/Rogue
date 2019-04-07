@@ -17,6 +17,14 @@ from entities.player import Player
 screen_width, screen_height = 100, 70
 map_width, map_height = screen_width, screen_height
 
+bar_width = 20
+panel_height = 7
+panel_y = screen_height - panel_height
+
+message_x = bar_width + 2
+message_width = screen_width - bar_width + 2
+message_height = panel_height - 1
+
 min_room_size, max_room_size = 10, 25
 max_rooms = 15
 
@@ -57,6 +65,7 @@ def main():
     tcod.console_init_root(screen_width, screen_height, 'Rogue', False)
 
     con = tcod.console_new(screen_width, screen_height)
+    panel = tcod.console_new(screen_width, screen_height)
 
     # Generate the tile map
     game_map = GameMap(map_width, map_height)
@@ -89,7 +98,8 @@ def main():
             calculate_fov(fov_map, player.x, player.y, fov_radius, fov_light_walls, fov_algorithm)
 
         # Render everything
-        render_all(con, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height, debug)
+        render_all(con, panel, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height, bar_width,
+                   panel_height, panel_y, debug)
         fov_recalculate = False
 
         # Apply the updates on screen
