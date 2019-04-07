@@ -15,11 +15,12 @@ from entities.player import Player
 
 # Maximum supported values: Actual monitor width or height // 10
 screen_width, screen_height = 100, 70
-map_width, map_height = screen_width, screen_height
 
 bar_width = 20
 panel_height = 7
 panel_y = screen_height - panel_height
+
+map_width, map_height = screen_width, screen_height - panel_height
 
 message_x = bar_width + 2
 message_width = screen_width - bar_width + 2

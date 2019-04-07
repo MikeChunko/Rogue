@@ -25,11 +25,7 @@ def render_all(con, panel, message_log, entities, game_map, fov_map, fov_recalcu
     tcod.console_clear(panel)
 
     # Print game messages to the bottom panel
-    y = 1
-    for message in message_log.messages:
-        tcod.console_set_default_foreground(panel, message.color)
-        tcod.console_print_ex(panel, message_log.x, y, tcod.BKGND_NONE, tcod.LEFT, message.text)
-        y += 1
+    render_messages(panel, message_log)
 
     # Draw the player stats to the bottom panel
     render_bar(panel, 1, 1, bar_width, "HP", entities[0].hp, entities[0].max_hp, tcod.red, tcod.darker_red)
@@ -89,3 +85,11 @@ def render_bar(panel, x, y, total_width, name, value, maximum, foreground_color,
     tcod.console_set_default_foreground(panel, tcod.white)
     tcod.console_print_ex(panel, int(x + total_width / 2), y, tcod.BKGND_NONE, tcod.CENTER,
                           "{0}: {1}/{2}".format(name, value, maximum))
+
+
+def render_messages(panel, message_log):
+    y = 1
+    for message in message_log.messages:
+        tcod.console_set_default_foreground(panel, message.color)
+        tcod.console_print_ex(panel, message_log.x, y, tcod.BKGND_NONE, tcod.LEFT, message.text)
+        y += 1

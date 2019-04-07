@@ -1,3 +1,8 @@
+# File name: player.py
+# Author: Michael Chunko
+# Python Version: 3.7
+
+# This file contains the class representing a game message and the class representing the log of messages
 import tcod
 import textwrap
 
