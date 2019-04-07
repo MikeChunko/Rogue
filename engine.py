@@ -92,7 +92,6 @@ def main():
     fov_recalculate = True
     fov_map = initialize_fov(game_map)
 
-
     # Game loop
     while not tcod.console_is_window_closed():
         # Update key and mouse with the user inputs
@@ -102,7 +101,8 @@ def main():
             calculate_fov(fov_map, player.x, player.y, fov_radius, fov_light_walls, fov_algorithm)
 
         # Render everything
-        render_all(con, panel, message_log, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height, bar_width,
+        render_all(con, panel, message_log, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height,
+                   bar_width,
                    panel_height, panel_y, debug)
         fov_recalculate = False
 
@@ -149,6 +149,12 @@ def main():
                 dead_entity.kill(game_map.tiles)
                 entities.remove(dead_entity)
 
+            damaged_entity = result.get("damaged")
+
+            if damaged_entity:
+                message_log.add_message(
+                    Message("You attacked the {0} for {1} damage".format(damaged_entity[0], damaged_entity[1])))
+
         if game_state == GameStates.ENEMY_TURN:
             enemy_turn_results = enty.entity_turn(entities, fov_map, game_map)
             game_state = GameStates.PLAYER_TURN
@@ -158,8 +164,15 @@ def main():
 
                 if dead:
                     game_state = player.kill(game_map.tiles)
+                    message_log.add_message(Message("You have died"))
+                    message_log.add_message(Message("GAME OVER"))
                     break
-            print()
+
+                damaged_entity = result.get("damaged")
+
+                if damaged_entity:
+                    message_log.add_message(
+                        Message("The {0} attacked you for {1} damage".format(damaged_entity[0], damaged_entity[1])))
 
 
 if __name__ == "__main__":

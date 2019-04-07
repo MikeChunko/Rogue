@@ -15,19 +15,15 @@ class Player(Attacker):
     def attack(self, target):
         damage = self.power - target.defense
 
-        if damage > 0:
-            print("You attack {0} for {1} damage, leaving them at {2} hp".format(target.name,
-                                                                                 damage, target.hp - damage))
-            return target.take_damage(damage)
-        else:
-            print("You attack {0}, but deal no damage".format(target.name))
+        results = [{"damaged": [target.name, damage]}]
+        results.extend(target.take_damage(damage))
+        return results
 
     def kill(self, tiles):
         """ Do any necessary preparations to kill off the player and present the game over screen. """
         if self.blocks:
             tiles[self.x][self.y].blocked = False
 
-        print("\n\nYou have died\n\nGAME\nOVER")
         self.char = "%"
         self.color = tcod.Color(150, 0, 0)
 

@@ -39,12 +39,9 @@ class Attacker(Entity):
     def attack(self, target):
         damage = self.power - target.defense
 
-        if damage > 0:
-            print("{0} attacks {1} for {2} damage, leaving them at {3} hp".format(self.name.capitalize(), target.name,
-                                                                                  damage, target.hp - damage))
-            return target.take_damage(damage)
-        else:
-            print(self.name, "attacks, but deals no damage")
+        results = [{"damaged": [self.name, damage]}]
+        results.extend(target.take_damage(damage))
+        return results
 
     def __repr__(self):
         return "{0}: hp = {1}, defense = {2}, power = {3}".format(self.name, self.hp, self.defense, self.power)

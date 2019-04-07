@@ -74,8 +74,6 @@ class Entity:
         player = entities[0]
         if self.moves and (tcod.map_is_in_fov(fov_map, self.x, self.y) or self.distance_to(player) <= 5):
             self.move_towards(player.x, player.y, game_map)
-        else:
-            print(self.name + " does nothing")
 
     def distance_to(self, other):
         return math.sqrt((other.x - self.x) ** 2 + (other.y - self.y) ** 2)
