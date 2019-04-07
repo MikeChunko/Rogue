@@ -3,7 +3,7 @@
 # Python Version: 3.7
 
 # This file contains the main engine of the game
-
+from game_messages import MessageLog, Message
 from input_handling import *
 from render import *
 from map_objects.game_map import GameMap
@@ -85,9 +85,13 @@ def main():
     # Initialize the game state
     game_state = GameStates.PLAYER_TURN
 
+    # Initialize the message log
+    message_log = MessageLog(message_x, message_width, message_height)
+
     # Determine whether or not the FOV needs to be recalculated
     fov_recalculate = True
     fov_map = initialize_fov(game_map)
+
 
     # Game loop
     while not tcod.console_is_window_closed():
@@ -98,7 +102,7 @@ def main():
             calculate_fov(fov_map, player.x, player.y, fov_radius, fov_light_walls, fov_algorithm)
 
         # Render everything
-        render_all(con, panel, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height, bar_width,
+        render_all(con, panel, message_log, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height, bar_width,
                    panel_height, panel_y, debug)
         fov_recalculate = False
 
@@ -141,7 +145,7 @@ def main():
             dead_entity = result.get("dead")
 
             if dead_entity:
-                print("You have killed the {0}".format(dead_entity.name))
+                message_log.add_message(Message("You have killed the {0}".format(dead_entity.name)))
                 dead_entity.kill(game_map.tiles)
                 entities.remove(dead_entity)
 

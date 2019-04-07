@@ -8,7 +8,7 @@ import tcod
 from engine import colors
 
 
-def render_all(con, panel, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height, bar_width,
+def render_all(con, panel, message_log, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height, bar_width,
                panel_height, panel_y, ignore_fov=False):
     # Draw the map
     draw_map(con, game_map, fov_map, fov_recalculate, ignore_fov)
@@ -19,11 +19,21 @@ def render_all(con, panel, entities, game_map, fov_map, fov_recalculate, screen_
 
     tcod.console_blit(con, 0, 0, screen_width, screen_height, 0, 0, 0)
 
-    # Draw the player stats
+    # Setup the bottom panel
     tcod.console_set_default_background(panel, tcod.black)
     tcod.console_clear(panel)
+
+    # Print game messages to the bottom panel
+    y = 1
+    for message in message_log.messages:
+        tcod.console_set_default_foreground(panel, message.color)
+        tcod.console_print_ex(panel, message_log.x, y, tcod.BKGND_NONE, tcod.LEFT, message.text)
+        y += 1
+
+    # Draw the player stats to the bottom panel
     render_bar(panel, 1, 1, bar_width, "HP", entities[0].hp, entities[0].max_hp, tcod.red, tcod.darker_red)
     tcod.console_blit(panel, 0, 0, screen_width, panel_height, 0, 0, panel_y)
+
 
 
 def clear_all(con, entities):
