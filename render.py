@@ -29,6 +29,10 @@ def render_all(con, panel, message_log, entities, game_map, fov_map, fov_recalcu
 
     # Draw the player stats to the bottom panel
     render_bar(panel, 1, 1, bar_width, "HP", entities[0].hp, entities[0].max_hp, tcod.red, tcod.darker_red)
+
+    # Draw the player inventory to the bottom panel
+    render_inventory(panel, ['a', 'b', 'c', 'd', 'e'])
+
     tcod.console_blit(panel, 0, 0, screen_width, panel_height, 0, 0, panel_y)
 
 
@@ -93,3 +97,14 @@ def render_messages(panel, message_log):
         tcod.console_set_default_foreground(panel, message.color)
         tcod.console_print_ex(panel, message_log.x, y, tcod.BKGND_NONE, tcod.LEFT, message.text)
         y += 1
+
+
+def render_inventory(panel, inventory):
+    # Draw "INVENTORY" directly above the inventory
+    tcod.console_print_ex(panel, 70, 1, tcod.BKGND_NONE, tcod.LEFT, "INVENTORY:")
+
+    # Render each item's symbol
+    dx = 0
+    for item in inventory:
+        tcod.console_print_ex(panel, 70 + dx, 2, tcod.BKGND_NONE, tcod.LEFT, item + " | ")
+        dx += 4
