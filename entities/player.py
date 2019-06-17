@@ -11,13 +11,19 @@ from game_states import GameStates
 class Player(Attacker):
     def __init__(self, hp, defense, power, tiles, x=1, y=1, char='#', color=tcod.white, name="none", blocks=True):
         Attacker.__init__(self, hp, defense, power, tiles, x, y, char, color, name, blocks, moves=True)
+        self.inventory = []
+        self.inventory_size = 5
+        for i in range(0, self.inventory_size):
+            self.inventory.append(None)
 
     def attack(self, target):
-        damage = self.power - target.defense
+        if target is Attacker:
+            damage = self.power - target.defense
 
-        results = [{"damaged": [target.name, damage]}]
-        results.extend(target.take_damage(damage))
-        return results
+            results = [{"damaged": [target.name, damage]}]
+            results.extend(target.take_damage(damage))
+            return results
+        return []
 
     def kill(self, tiles):
         """ Do any necessary preparations to kill off the player and present the game over screen. """

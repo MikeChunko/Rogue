@@ -7,11 +7,12 @@
 from map_objects.rectangle import Rectangle
 from entities.attacker import Attacker
 from entities.entity import get_entity_at_location
+from entities.pickup import Pickup
 from random import randint
 
 rooms = []
 
-# (hp, defense, power
+# (hp, defense, power)
 monster_stats = {
     "orc": (5, 1, 2),
     "goblin": (3, 0, 1)
@@ -101,13 +102,16 @@ def create_npcs(game_map, min_npcs, max_npcs, entities, colors):
                 x = randint(room.x1 + 1, room.x2 - 1)
                 y = randint(room.y1 + 1, room.y2 - 1)
 
-            # 80% chance to spawn a goblin, otherwise spawn an orc
-            # TODO change later
-            if randint(0, 100) < 80:
+            # 70% chance to spawn a goblin, 15% for an orc, 15% for an item
+            random_number = randint(0, 100)
+            if random_number < 70:  # goblin
                 hp, defense, power = monster_stats.get("goblin")
                 entities.append(
                     Attacker(hp, defense, power, game_map.tiles, x, y, "g", colors.get("goblin"), "goblin", True, True))
             else:
-                hp, defense, power = monster_stats.get("orc")
-                entities.append(
-                    Attacker(hp, defense, power, game_map.tiles, x, y, "O", colors.get("orc"), "orc", True, True))
+                if random_number < 85:  # orc
+                    hp, defense, power = monster_stats.get("orc")
+                    entities.append(
+                        Attacker(hp, defense, power, game_map.tiles, x, y, "O", colors.get("orc"), "orc", True, True))
+                else:  # item
+                    entities.append(Pickup(game_map.tiles, x, y, "_", colors.get("goblin"), "item"))

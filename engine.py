@@ -160,6 +160,7 @@ def main():
             enemy_turn_results = enty.entity_turn(entities, fov_map, game_map)
             game_state = GameStates.PLAYER_TURN
 
+            # Handle the entity turn results
             for result in enemy_turn_results:
                 dead = result.get("dead")
 
@@ -174,6 +175,19 @@ def main():
                 if damaged_entity:
                     message_log.add_message(
                         Message("The {0} attacked you for {1} damage".format(damaged_entity[0], damaged_entity[1])))
+
+                pickup_failed = result.get("pickup_failed")
+
+                if pickup_failed:
+                    message_log.add_message(
+                        Message("You cannot pick up the {0} since your inventory is full".format(pickup_failed[0])))
+
+                pickup_success = result.get("pickup_success")
+
+                if pickup_success:
+                    message_log.add_message(Message("You picked up the {0}".format(pickup_success[0])))
+                    pickup_success[1].kill(game_map.tiles)
+                    entities.remove(pickup_success[1])
 
 
 if __name__ == "__main__":

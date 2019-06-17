@@ -9,8 +9,7 @@ from engine import colors
 
 
 def render_all(con, panel, message_log, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height,
-               bar_width,
-               panel_height, panel_y, ignore_fov=False):
+               bar_width, panel_height, panel_y, ignore_fov=False):
     # Draw the map
     draw_map(con, game_map, fov_map, fov_recalculate, ignore_fov)
 
@@ -31,7 +30,7 @@ def render_all(con, panel, message_log, entities, game_map, fov_map, fov_recalcu
     render_bar(panel, 1, 1, bar_width, "HP", entities[0].hp, entities[0].max_hp, tcod.red, tcod.darker_red)
 
     # Draw the player inventory to the bottom panel
-    render_inventory(panel, ['a', 'b', 'c', 'd', 'e'])
+    render_inventory(panel, entities[0].inventory)
 
     tcod.console_blit(panel, 0, 0, screen_width, panel_height, 0, 0, panel_y)
 
@@ -106,5 +105,8 @@ def render_inventory(panel, inventory):
     # Render each item's symbol
     dx = 0
     for item in inventory:
-        tcod.console_print_ex(panel, 70 + dx, 2, tcod.BKGND_NONE, tcod.LEFT, item + " | ")
+        if item is None:
+            tcod.console_print_ex(panel, 70 + dx, 2, tcod.BKGND_NONE, tcod.LEFT, "  | ")
+        else:
+            tcod.console_print_ex(panel, 70 + dx, 2, tcod.BKGND_NONE, tcod.LEFT, item.char + " | ")
         dx += 4
