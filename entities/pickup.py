@@ -14,8 +14,7 @@ class Pickup(Entity):
 
     def take_turn(self, entities, fov_map, game_map):
         """ Checks if the player is on top of it and, if so, performs the code to obtain the item. """
-        result = {}
-        results = []
+        result = []
 
         # The player is on the same tile as the item
         if entities[0].x == self.x and entities[0].y == self.y:
@@ -26,11 +25,9 @@ class Pickup(Entity):
                 i += 1
 
             if i >= entities[0].inventory_size:
-                results.extend([{"pickup_failed": [self.name]}])
+                result = [{"pickup_failed": [self.name]}]
             else:
-                results.extend([{"pickup_success": [self.name, self]}])
+                result = [{"pickup_success": [self.name, self]}]
                 entities[0].inventory[i] = self
 
-        result = results
         return result
-

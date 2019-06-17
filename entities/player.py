@@ -17,7 +17,7 @@ class Player(Attacker):
             self.inventory.append(None)
 
     def attack(self, target):
-        if target is Attacker:
+        if isinstance(target, Attacker):
             damage = self.power - target.defense
 
             results = [{"damaged": [target.name, damage]}]
