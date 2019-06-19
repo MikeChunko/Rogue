@@ -9,8 +9,22 @@ import tcod
 
 
 class Pickup(Entity):
-    def __init__(self, tiles, x=1, y=1, char='-', color=tcod.white, name="item", blocks=False, moves=False):
+    def __init__(self, tiles, x=1, y=1, char='-', color=tcod.white, name="item", blocks=False, moves=False,
+                 deletes=False):
         Entity.__init__(self, tiles, x, y, char, color, name, blocks, moves)
+        self.deletes = deletes
+
+    def use(self, entities):
+        """ Performs the use action for the item. """
+        message = "You used the {0}. It didn't do much of anything".format(self.name)
+        return [{"pickup_used": [message, self]}]
+
+    def delete(self, player):
+        """ Remove the item from the player inventory. """
+        for i in range(0, player.inventory_size):
+            if player.inventory[i] == self:
+                player.inventory[i] = None
+                break
 
     def take_turn(self, entities, fov_map, game_map):
         """ Checks if the player is on top of it and, if so, performs the code to obtain the item. """

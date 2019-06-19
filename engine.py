@@ -139,8 +139,7 @@ def main():
 
         if use and game_state == GameStates.PLAYER_TURN:
             if player.inventory[use - 1] is not None:
-                print("You used", use)
-                #player.inventory[use - 1].use()
+                player_turn_results.extend(player.inventory[use - 1].use(entities))
 
         if exit:
             return True
@@ -162,6 +161,13 @@ def main():
             if damaged_entity:
                 message_log.add_message(
                     Message("You attacked the {0} for {1} damage".format(damaged_entity[0], damaged_entity[1])))
+
+            pickup_used = result.get("pickup_used")
+
+            if pickup_used:
+                message_log.add_message(Message(pickup_used[0]))
+                if pickup_used[1].deletes:
+                    pickup_used[1].delete(player)
 
         if game_state == GameStates.ENEMY_TURN:
             enemy_turn_results = enty.entity_turn(entities, fov_map, game_map)
