@@ -114,4 +114,4 @@ def create_npcs(game_map, min_npcs, max_npcs, entities, colors):
                     entities.append(
                         Attacker(hp, defense, power, game_map.tiles, x, y, "O", colors.get("orc"), "orc", True, True))
                 else:  # item
-                    entities.append(Pickup(game_map.tiles, x, y, "_", colors.get("goblin"), "item"))
+                    entities.append(Pickup(game_map.tiles, x, y, "_", colors.get("hp potion"), "item"))

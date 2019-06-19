@@ -8,6 +8,8 @@ import tcod
 from engine import colors
 
 
+# TODO add render priority (should be pickups < monsters < player)
+
 def render_all(con, panel, message_log, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height,
                bar_width, panel_height, panel_y, ignore_fov=False):
     # Draw the map

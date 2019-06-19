@@ -21,6 +21,18 @@ def handle_keys(key):
     elif key.vk == tcod.KEY_DOWN or key_char == 's':
         return {"move": (0, 1)}
 
+    # Inventory keys
+    if key.vk == tcod.KEY_1:
+        return {"use": 1}
+    elif key.vk == tcod.KEY_2:
+        return {"use": 2}
+    elif key.vk == tcod.KEY_3:
+        return {"use": 3}
+    elif key.vk == tcod.KEY_4:
+        return {"use": 4}
+    elif key.vk == tcod.KEY_5:
+        return {"use": 5}
+
     # Other keys
     if key.vk == tcod.KEY_ENTER and tcod.KEY_ALT:
         # Alt+Enter: toggle fullscreen

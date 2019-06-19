@@ -45,6 +45,7 @@ colors = {
     "unseen": tcod.Color(20, 20, 30),
     "goblin": tcod.Color(10, 150, 10),
     "orc": tcod.Color(10, 130, 80),
+    "hp potion": tcod.Color(200, 10, 55)
 }
 
 entities = []
@@ -117,6 +118,7 @@ def main():
         action = handle_keys(key)
 
         move = action.get("move")
+        use = action.get("use")
         exit = action.get("exit")
         fullscreen = action.get("fullscreen")
 
@@ -134,6 +136,11 @@ def main():
                 player_turn_results.extend(player.attack(target))
 
             game_state = GameStates.ENEMY_TURN
+
+        if use and game_state == GameStates.PLAYER_TURN:
+            if player.inventory[use - 1] is not None:
+                print("You used", use)
+                #player.inventory[use - 1].use()
 
         if exit:
             return True
