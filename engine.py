@@ -53,7 +53,7 @@ entities = []
 max_fps = 30
 
 # Starts the game with several debug features when True
-debug = True
+debug = False
 
 
 def main():
@@ -121,6 +121,7 @@ def main():
         use = action.get("use")
         exit = action.get("exit")
         fullscreen = action.get("fullscreen")
+        regenerate = action.get("regenerate")
 
         player_turn_results = []
 
@@ -146,6 +147,25 @@ def main():
 
         if fullscreen:
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
+
+        if regenerate:  # Properly generate a new game map
+            # Reinitialize the tile map
+            game_map = GameMap(map_width, map_height)
+
+            # Remove all entities except the player
+            entities.clear()
+            entities.append(player)
+
+            # Generate a new game map
+            generate_all(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs, max_npcs,
+                         colors, entities)
+
+            # Reset the message log
+            message_log = MessageLog(message_x, message_width, message_height)
+
+            # Set up the fov_map for the new game map and recalculate it
+            fov_recalculate = True
+            fov_map = initialize_fov(game_map)
 
         # Handle the player turn results
         for result in player_turn_results:

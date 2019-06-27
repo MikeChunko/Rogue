@@ -40,6 +40,9 @@ def handle_keys(key):
     elif key.vk == tcod.KEY_ESCAPE:
         # Exit
         return {"exit": True}
+    elif key_char == 'g':
+        # Generate a new map
+        return {"regenerate": True}
 
     # No key pressed
     return {}

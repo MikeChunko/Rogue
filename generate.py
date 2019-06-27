@@ -10,17 +10,18 @@ from entities.health_potion import HealthPotion
 from entities.entity import get_entity_at_location
 from random import randint
 
-rooms = []
-
 # (hp, defense, power)
 monster_stats = {
     "orc": (5, 1, 2),
     "goblin": (3, 0, 1)
 }
 
+rooms = []
+
 
 def generate_all(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs, max_npcs,
                  colors, entities):
+    rooms.clear()
     make_map(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, entities)
     create_npcs(game_map, min_npcs, max_npcs, entities, colors)
 
