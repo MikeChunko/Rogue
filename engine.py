@@ -121,6 +121,7 @@ def main():
         use = action.get("use")
         exit = action.get("exit")
         fullscreen = action.get("fullscreen")
+        reset = action.get("reset")
         regenerate = action.get("regenerate")
 
         player_turn_results = []
@@ -147,6 +148,14 @@ def main():
 
         if fullscreen:
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
+
+        if reset:  # Reset the game
+            # Generate a new player
+            player = Player(10, 0, 2, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player",
+                            True)
+
+            # Generate a new game map
+            regenerate = True
 
         if regenerate:  # Properly generate a new game map
             # Reinitialize the tile map

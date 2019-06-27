@@ -40,8 +40,11 @@ def handle_keys(key):
     elif key.vk == tcod.KEY_ESCAPE:
         # Exit
         return {"exit": True}
+    elif key_char == 'r':
+        # Reset the game
+        return {"reset": True}
     elif key_char == 'g':
-        # Generate a new map
+        # Generate a new map (preserve player stats)
         return {"regenerate": True}
 
     # No key pressed
