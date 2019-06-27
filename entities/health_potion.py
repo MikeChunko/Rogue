@@ -10,7 +10,7 @@ import tcod
 
 class HealthPotion(Pickup):
     def __init__(self, tiles, x=1, y=1, char='!', color=tcod.red, name="health potion", blocks=False, moves=False,
-                 deletes=True, heal_amount = 5):
+                 deletes=True, heal_amount=5):
         Pickup.__init__(self, tiles, x, y, char, color, name, blocks, moves, deletes)
         self.heal_amount = heal_amount
 
@@ -18,6 +18,9 @@ class HealthPotion(Pickup):
         """ Performs the use action for the item. """
         message = "You used the {0}. It healed for {1} HP".format(self.name, self.heal_amount)
         entities[0].hp += self.heal_amount
+        if entities[0].hp > entities[0].max_hp:
+            entities[0].hp = entities[0].max_hp
+
         return [{"pickup_used": [message, self]}]
 
     def delete(self, player):
