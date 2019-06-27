@@ -6,8 +6,8 @@
 
 from map_objects.rectangle import Rectangle
 from entities.attacker import Attacker
+from entities.health_potion import HealthPotion
 from entities.entity import get_entity_at_location
-from entities.pickup import Pickup
 from random import randint
 
 rooms = []
@@ -115,4 +115,4 @@ def create_npcs(game_map, min_npcs, max_npcs, entities, colors):
                         Attacker(hp, defense, power, game_map.tiles, x, y, "O", colors.get("orc"), "orc", True, True))
                 else:  # item
                     entities.append(
-                        Pickup(game_map.tiles, x, y, "_", colors.get("hp potion"), "item", False, False, True))
+                        HealthPotion(game_map.tiles, x, y))

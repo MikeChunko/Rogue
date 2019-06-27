@@ -1,22 +1,23 @@
-# File name: pickup.py
+# File name: health_potion.py
 # Author: Michael Chunko
 # Python Version: 3.7
 
-# This file contains the class representing items that can be picked up
+# This file contains the class representing the health potion item
 
-from entities.entity import Entity
+from entities.pickup import Pickup
 import tcod
 
 
-class Pickup(Entity):
-    def __init__(self, tiles, x=1, y=1, char='-', color=tcod.white, name="item", blocks=False, moves=False,
-                 deletes=True):
-        Entity.__init__(self, tiles, x, y, char, color, name, blocks, moves)
-        self.deletes = deletes
+class HealthPotion(Pickup):
+    def __init__(self, tiles, x=1, y=1, char='!', color=tcod.red, name="health potion", blocks=False, moves=False,
+                 deletes=True, heal_amount = 5):
+        Pickup.__init__(self, tiles, x, y, char, color, name, blocks, moves, deletes)
+        self.heal_amount = heal_amount
 
     def use(self, entities):
         """ Performs the use action for the item. """
-        message = "You used the {0}. It didn't do much of anything".format(self.name)
+        message = "You used the {0}. It healed for {1} HP".format(self.name, self.heal_amount)
+        entities[0].hp += self.heal_amount
         return [{"pickup_used": [message, self]}]
 
     def delete(self, player):
