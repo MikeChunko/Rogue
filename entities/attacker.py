@@ -39,6 +39,9 @@ class Attacker(Entity):
     def attack(self, target):
         damage = self.power - target.defense
 
+        if damage < 0:
+            damage = 0
+
         results = [{"damaged": [self.name, damage]}]
         results.extend(target.take_damage(damage))
         return results

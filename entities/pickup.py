@@ -32,7 +32,6 @@ class Pickup(Entity):
 
         # The player is on the same tile as the item
         if entities[0].x == self.x and entities[0].y == self.y:
-
             # Find the index of the first open space in the player inventory
             i = 0
             while i < entities[0].inventory_size and entities[0].inventory[i] is not None:

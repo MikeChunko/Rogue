@@ -7,6 +7,7 @@
 from map_objects.rectangle import Rectangle
 from entities.attacker import Attacker
 from entities.health_potion import HealthPotion
+from entities.armor_upgrade import ArmorUpgrade
 from entities.entity import get_entity_at_location
 from random import randint
 
@@ -103,17 +104,17 @@ def create_npcs(game_map, min_npcs, max_npcs, entities, colors):
                 x = randint(room.x1 + 1, room.x2 - 1)
                 y = randint(room.y1 + 1, room.y2 - 1)
 
-            # 70% chance to spawn a goblin, 15% for an orc, 15% for an item
+            # 70% chance to spawn a goblin, 10% for an orc, 12% for HP potion, 8% chance for an armor upgrade
             random_number = randint(0, 100)
             if random_number < 70:  # goblin
                 hp, defense, power = monster_stats.get("goblin")
                 entities.append(
                     Attacker(hp, defense, power, game_map.tiles, x, y, "g", colors.get("goblin"), "goblin", True, True))
+            elif random_number < 80:  # orc
+                hp, defense, power = monster_stats.get("orc")
+                entities.append(
+                    Attacker(hp, defense, power, game_map.tiles, x, y, "O", colors.get("orc"), "orc", True, True))
+            elif random_number < 92:  # item
+                entities.append(HealthPotion(game_map.tiles, x, y))
             else:
-                if random_number < 85:  # orc
-                    hp, defense, power = monster_stats.get("orc")
-                    entities.append(
-                        Attacker(hp, defense, power, game_map.tiles, x, y, "O", colors.get("orc"), "orc", True, True))
-                else:  # item
-                    entities.append(
-                        HealthPotion(game_map.tiles, x, y))
+                entities.append(ArmorUpgrade(game_map.tiles, x, y))

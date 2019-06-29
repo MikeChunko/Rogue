@@ -231,6 +231,14 @@ def main():
                     pickup_success[1].kill(game_map.tiles)
                     entities.remove(pickup_success[1])
 
+                upgrade_used = result.get("upgrade_used")
+
+                if upgrade_used:
+                    message_log.add_message(Message(upgrade_used[0]))
+                    message_log.add_message(Message(upgrade_used[1]))
+                    upgrade_used[2].kill(game_map.tiles)
+                    entities.remove(upgrade_used[2])
+
 
 if __name__ == "__main__":
     main()
