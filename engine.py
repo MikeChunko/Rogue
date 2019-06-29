@@ -128,9 +128,12 @@ def main():
 
         if move and game_state == GameStates.PLAYER_TURN:
             dx, dy = move
+            print("moving")
             if not game_map.is_blocked(player.x + dx, player.y + dy):
                 player.move(game_map.tiles, dx, dy)
                 fov_recalculate = True
+            else:
+                print("move blocked")
 
             target = enty.get_entity_at_location(player.x + dx, player.y + dy, entities)
 
@@ -156,6 +159,8 @@ def main():
 
             # Generate a new game map
             regenerate = True
+
+            game_state = GameStates.PLAYER_TURN
 
         if regenerate:  # Properly generate a new game map
             # Reinitialize the tile map
