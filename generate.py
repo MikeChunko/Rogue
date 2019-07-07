@@ -22,9 +22,10 @@ rooms = []
 
 def generate_all(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs, max_npcs,
                  colors, entities):
+    """ Generate the whole game floor, rooms and entities included. """
     rooms.clear()
     make_map(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, entities)
-    create_npcs(game_map, min_npcs, max_npcs, entities, colors)
+    create_entities(game_map, min_npcs, max_npcs, entities, colors)
 
 
 def make_map(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, entities):
@@ -69,7 +70,7 @@ def make_map(game_map, map_width, map_height, max_rooms, min_room_size, max_room
 
 
 def create_room(game_map, room):
-    """ Make the tiles in room unblocked and see-through.
+    """ Make the tiles in a room unblocked and see-through.
         The "+ 1" is because (x1, y1) should be a wall. """
     for x in range(room.x1 + 1, room.x2):
         for y in range(room.y1 + 1, room.y2):
@@ -94,7 +95,9 @@ def create_tunnel(game_map, start, end, location, direction, entities):
                 game_map.tiles[location][y].block_sight = False
 
 
-def create_npcs(game_map, min_npcs, max_npcs, entities, colors):
+def create_entities(game_map, min_npcs, max_npcs, entities, colors):
+    """ Generate [min_npcs, max_npcs] entities in every room.
+        The entity may either be an enemy or an item. """
     for room in rooms:
         for i in range(0, randint(min_npcs, max_npcs)):
             x = y = 0
@@ -113,6 +116,7 @@ def create_npcs(game_map, min_npcs, max_npcs, entities, colors):
 
 
 def create_enemies(game_map, entities, colors, x, y):
+    """ Generate an enemy at the given (x, y) coordinate. """
     # 85% chance for a goblin, 15% for an orc
     random_number = randint(0, 100)
     if random_number < 85:  # goblin
@@ -126,6 +130,7 @@ def create_enemies(game_map, entities, colors, x, y):
 
 
 def create_items(game_map, entities, x, y):
+    """ Generate an item at the given (x, y) coordinate. """
     # 85% chance for a HP potion, 15% for an armor upgrade
     random_number = randint(0, 100)
     if random_number < 85:  # HP potion
