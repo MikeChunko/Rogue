@@ -12,6 +12,7 @@ from engine import colors
 
 def render_all(con, panel, message_log, entities, game_map, fov_map, fov_recalculate, screen_width, screen_height,
                bar_width, panel_height, panel_y, ignore_fov=False):
+    """ Render every part of the game. """
     # Draw the map
     draw_map(con, game_map, fov_map, fov_recalculate, ignore_fov)
 
@@ -38,11 +39,14 @@ def render_all(con, panel, message_log, entities, game_map, fov_map, fov_recalcu
 
 
 def clear_all(con, entities):
+    """ Clear the rendered entities by inserting a blank character in their place.
+        This prepares the console for the next frame to be rendered. """
     for entity in entities:
         clear_entity(con, entity)
 
 
 def draw_map(con, game_map, fov_map, fov_recalculate, ignore_fov=False):
+    """ Render the map elements (wall, floor) and their proper state (seen/unseen in/not in fov). """
     if fov_recalculate:
         for y in range(game_map.height):
             for x in range(game_map.width):
@@ -67,16 +71,19 @@ def draw_map(con, game_map, fov_map, fov_recalculate, ignore_fov=False):
 
 
 def draw_entity(con, entity, fov_map, ignore_fov=False):
+    """ Render the entity, checking to make sure that it is in the player's fov. """
     if ignore_fov or tcod.map_is_in_fov(fov_map, entity.x, entity.y):
         tcod.console_set_default_foreground(con, entity.color)
         tcod.console_put_char(con, entity.x, entity.y, entity.char, tcod.BKGND_NONE)
 
 
 def clear_entity(con, entity):
+    """ Clear a given entity, replacing it with a blank character. """
     tcod.console_put_char(con, entity.x, entity.y, ' ', tcod.BKGND_NONE)
 
 
 def render_bar(panel, x, y, total_width, name, value, maximum, foreground_color, background_color):
+    """ Render a "bar" (HP, XP, etc.). """
     bar_width = int((value / maximum) * total_width)
 
     # Going to be honest, don't know why it has to be done this way
@@ -93,6 +100,7 @@ def render_bar(panel, x, y, total_width, name, value, maximum, foreground_color,
 
 
 def render_messages(panel, message_log):
+    """ Render the messages in the message log. """
     y = 1
     for message in message_log.messages:
         tcod.console_set_default_foreground(panel, message.color)
@@ -101,6 +109,7 @@ def render_messages(panel, message_log):
 
 
 def render_inventory(panel, inventory):
+    """ Render the player's inventory and its contents. """
     # Draw "INVENTORY" directly above the inventory
     tcod.console_print_ex(panel, 70, 1, tcod.BKGND_NONE, tcod.LEFT, "INVENTORY:")
 
