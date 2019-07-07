@@ -104,17 +104,31 @@ def create_npcs(game_map, min_npcs, max_npcs, entities, colors):
                 x = randint(room.x1 + 1, room.x2 - 1)
                 y = randint(room.y1 + 1, room.y2 - 1)
 
-            # 70% chance to spawn a goblin, 10% for an orc, 12% for HP potion, 8% chance for an armor upgrade
+            # 80% chance to spawn an enemy, 20% for an item
             random_number = randint(0, 100)
-            if random_number < 70:  # goblin
-                hp, defense, power = monster_stats.get("goblin")
-                entities.append(
-                    Attacker(hp, defense, power, game_map.tiles, x, y, "g", colors.get("goblin"), "goblin", True, True))
-            elif random_number < 80:  # orc
-                hp, defense, power = monster_stats.get("orc")
-                entities.append(
-                    Attacker(hp, defense, power, game_map.tiles, x, y, "O", colors.get("orc"), "orc", True, True))
-            elif random_number < 92:  # item
-                entities.append(HealthPotion(game_map.tiles, x, y))
+            if random_number < 80:
+                create_enemies(game_map, entities, colors, x, y)
             else:
-                entities.append(ArmorUpgrade(game_map.tiles, x, y))
+                create_items(game_map, entities, x, y)
+
+
+def create_enemies(game_map, entities, colors, x, y):
+    # 85% chance for a goblin, 15% for an orc
+    random_number = randint(0, 100)
+    if random_number < 85:  # goblin
+        hp, defense, power = monster_stats.get("goblin")
+        entities.append(
+            Attacker(hp, defense, power, game_map.tiles, x, y, "g", colors.get("goblin"), "goblin"))
+    else:  # orc
+        hp, defense, power = monster_stats.get("orc")
+        entities.append(
+            Attacker(hp, defense, power, game_map.tiles, x, y, "O", colors.get("orc"), "orc"))
+
+
+def create_items(game_map, entities, x, y):
+    # 85% chance for a HP potion, 15% for an armor upgrade
+    random_number = randint(0, 100)
+    if random_number < 85:  # HP potion
+        entities.append(HealthPotion(game_map.tiles, x, y))
+    else:  # armor upgrade
+        entities.append(ArmorUpgrade(game_map.tiles, x, y))
