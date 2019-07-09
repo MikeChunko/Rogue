@@ -12,6 +12,7 @@ class Rectangle:
         self.y2 = y + height
 
     def center(self):
+        """ Return the (x, y) coordinates corresponding to the center of the rectangle. """
         center_x = (self.x1 + self.x2) // 2
         center_y = (self.y1 + self.y2) // 2
         return center_x, center_y

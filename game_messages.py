@@ -21,6 +21,7 @@ class MessageLog:
         self.height = height
 
     def add_message(self, message):
+        """ Add a message to the message log. """
         # Split the message if needed
         wrapped_message = textwrap.wrap(message.text, self.width)
 

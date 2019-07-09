@@ -200,6 +200,7 @@ def main():
                 if pickup_used[1].deletes:
                     pickup_used[1].delete(player)
 
+        # Enemy turn (really every entity that is not the player)
         if game_state == GameStates.ENEMY_TURN:
             enemy_turn_results = enty.entity_turn(entities, fov_map, game_map)
             game_state = GameStates.PLAYER_TURN
