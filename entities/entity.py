@@ -83,13 +83,17 @@ class Entity:
 
 
 def get_entity_at_location(x, y, entities):
-    """ Return the entity at the given x, y coordinates.
+    """ Return all entities at the given x, y coordinates.
         Return -1 if there is no entity at these coordinates."""
+    results = []
     for entity in entities:
         if entity.x == x and entity.y == y:
-            return entity
+            results.append(entity)
 
-    return -1
+    if not results:
+        return -1
+    else:
+        return results
 
 
 def entity_turn(entities, fov_map, game_map):

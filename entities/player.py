@@ -21,13 +21,15 @@ class Player(Attacker):
         self.xp = 0
         self.level = level
 
-    def attack(self, target):
-        if isinstance(target, Attacker):
-            damage = self.power - target.defense
+    def attack(self, targets):
+        for target in targets:
+            # Iterate through the targets until an attacker is found
+            if isinstance(target, Attacker):
+                damage = self.power - target.defense
 
-            results = [{"damaged": [target.name, damage]}]
-            results.extend(target.take_damage(damage))
-            return results
+                results = [{"damaged": [target.name, damage]}]
+                results.extend(target.take_damage(damage))
+                return results
         return []
 
     def add_xp(self, dxp):
