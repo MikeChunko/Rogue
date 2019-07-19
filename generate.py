@@ -11,10 +11,10 @@ from entities.armor_upgrade import ArmorUpgrade
 from entities.entity import get_entity_at_location
 from random import randint
 
-# (hp, defense, power)
+# (hp, defense, power, xp worth)
 monster_stats = {
-    "orc": (5, 1, 2),
-    "goblin": (3, 0, 1)
+    "orc": (5, 1, 2, 3),
+    "goblin": (3, 0, 1, 1)
 }
 
 rooms = []
@@ -120,13 +120,13 @@ def create_enemies(game_map, entities, colors, x, y):
     # 85% chance for a goblin, 15% for an orc
     random_number = randint(0, 100)
     if random_number < 85:  # goblin
-        hp, defense, power = monster_stats.get("goblin")
+        hp, defense, power, xp = monster_stats.get("goblin")
         entities.append(
-            Attacker(hp, defense, power, game_map.tiles, x, y, "g", colors.get("goblin"), "goblin"))
+            Attacker(hp, defense, power, xp, game_map.tiles, x, y, "g", colors.get("goblin"), "goblin"))
     else:  # orc
-        hp, defense, power = monster_stats.get("orc")
+        hp, defense, power, xp = monster_stats.get("orc")
         entities.append(
-            Attacker(hp, defense, power, game_map.tiles, x, y, "O", colors.get("orc"), "orc"))
+            Attacker(hp, defense, power, xp, game_map.tiles, x, y, "O", colors.get("orc"), "orc"))
 
 
 def create_items(game_map, entities, x, y):

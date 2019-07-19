@@ -182,12 +182,15 @@ def main():
 
         # Handle the player turn results
         for result in player_turn_results:
-            dead_entity = result.get("dead")
+            dead_attacker = result.get("dead")
 
-            if dead_entity:
-                message_log.add_message(Message("You have killed the {0}".format(dead_entity.name)))
-                dead_entity.kill(game_map.tiles)
-                entities.remove(dead_entity)
+            if dead_attacker:
+                message_log.add_message(Message("You have killed the {0}".format(dead_attacker.name)))
+                dead_attacker.kill(game_map.tiles)
+
+                message_log.add_message(Message("{0} XP granted".format(dead_attacker.xp)))
+                player.add_xp(dead_attacker.xp)
+                entities.remove(dead_attacker)
 
             damaged_entity = result.get("damaged")
 

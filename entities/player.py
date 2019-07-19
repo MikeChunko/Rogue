@@ -9,8 +9,9 @@ from game_states import GameStates
 
 
 class Player(Attacker):
-    def __init__(self, hp, defense, power, max_xp, level, tiles, x=1, y=1, char='#', color=tcod.white, name="none", blocks=True):
-        Attacker.__init__(self, hp, defense, power, tiles, x, y, char, color, name, blocks, moves=True)
+    def __init__(self, hp, defense, power, max_xp, level, tiles, x=1, y=1, char='#', color=tcod.white, name="none",
+                 blocks=True):
+        Attacker.__init__(self, hp, defense, power, 0, tiles, x, y, char, color, name, blocks, moves=True)
         self.inventory = []
         self.inventory_size = 5
         for i in range(0, self.inventory_size):
@@ -28,6 +29,16 @@ class Player(Attacker):
             results.extend(target.take_damage(damage))
             return results
         return []
+
+    def add_xp(self, dxp):
+        """ Gain experience. """
+        self.xp += dxp
+
+        # Level up
+        if self.xp > self.max_xp:
+            self.xp -= self.max_xp
+            self.max_xp += 5
+            self.level += 1
 
     def kill(self, tiles):
         """ Do any necessary preparations to kill off the player and present the game over screen. """
