@@ -8,13 +8,14 @@ import tcod
 
 
 class Attacker(Entity):
-    def __init__(self, hp, defense, power, tiles, x=1, y=1, char='#', color=tcod.white, name="none", blocks=True,
+    def __init__(self, hp, defense, power, xp, tiles, x=1, y=1, char='#', color=tcod.white, name="none", blocks=True,
                  moves=True):
         Entity.__init__(self, tiles, x, y, char, color, name, blocks, moves)
         self.max_hp = hp
         self.hp = hp
         self.defense = defense
         self.power = power
+        self.xp = xp
 
     def take_turn(self, entities, fov_map, game_map):
         """ The entity takes their turn in the game. """

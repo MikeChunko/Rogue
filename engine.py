@@ -73,7 +73,8 @@ def main():
     game_map = GameMap(map_width, map_height)
 
     # Initialize the player and the entities list
-    player = Player(10, 0, 2, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player", True)
+    player = Player(10, 0, 2, 10, 1, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player",
+                    True)
     entities.append(player)
 
     # Generate the rest of the game map
@@ -151,7 +152,8 @@ def main():
 
         if reset:  # Reset the game
             # Generate a new player
-            player = Player(10, 0, 2, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player",
+            player = Player(10, 0, 2, 10, 1, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white,
+                            "player",
                             True)
 
             # Generate a new game map

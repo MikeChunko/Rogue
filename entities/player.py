@@ -9,12 +9,16 @@ from game_states import GameStates
 
 
 class Player(Attacker):
-    def __init__(self, hp, defense, power, tiles, x=1, y=1, char='#', color=tcod.white, name="none", blocks=True):
+    def __init__(self, hp, defense, power, max_xp, level, tiles, x=1, y=1, char='#', color=tcod.white, name="none", blocks=True):
         Attacker.__init__(self, hp, defense, power, tiles, x, y, char, color, name, blocks, moves=True)
         self.inventory = []
         self.inventory_size = 5
         for i in range(0, self.inventory_size):
             self.inventory.append(None)
+
+        self.max_xp = max_xp
+        self.xp = 0
+        self.level = level
 
     def attack(self, target):
         if isinstance(target, Attacker):
@@ -32,5 +36,8 @@ class Player(Attacker):
 
         self.char = "%"
         self.color = tcod.Color(150, 0, 0)
+
+        # Ensures the player never sees a negative HP value
+        self.hp = 0
 
         return GameStates.GAME_OVER
