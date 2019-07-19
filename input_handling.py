@@ -34,7 +34,7 @@ def handle_keys(key):
         return {"use": 5}
 
     # Other keys
-    if key.vk == tcod.KEY_ENTER and key.vk:
+    if key.vk == tcod.KEY_ENTER:
         # Toggle fullscreen
         return {"fullscreen": True}
     elif key.vk == tcod.KEY_ESCAPE:
