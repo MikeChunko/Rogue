@@ -31,7 +31,7 @@ def render_all(con, panel, message_log, entities, game_map, fov_map, fov_recalcu
 
     # Draw the player stats to the bottom panel
     render_bar(panel, 1, 1, bar_width, "HP", entities[0].hp, entities[0].max_hp, tcod.red, tcod.darker_red)
-    render_bar(panel, 1, 3, bar_width, "LVL: {0}".format(entities[0].level), entities[0].xp, entities[0].max_hp,
+    render_bar(panel, 1, 3, bar_width, "LVL: {0}".format(entities[0].level), entities[0].xp, entities[0].max_xp,
                tcod.green, tcod.darker_green)
 
     # Draw the player inventory to the bottom panel
