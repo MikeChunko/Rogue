@@ -7,6 +7,13 @@ from entities.attacker import Attacker
 import tcod
 from game_states import GameStates
 
+# Stat increases for level ups
+# hp, defense, power
+level_bonus = {
+    2: (2, 0, 0),
+    3: (3, 0, 1)
+}
+
 
 class Player(Attacker):
     def __init__(self, hp, defense, power, max_xp, level, tiles, x=1, y=1, char='#', color=tcod.white, name="none",
@@ -41,6 +48,17 @@ class Player(Attacker):
             self.xp -= self.max_xp
             self.max_xp += 5
             self.level += 1
+
+            # Apply stat increases
+            dhp, ddef, dpow = level_bonus.get(self.level)
+            self.hp += dhp
+            self.max_hp += dhp
+            self.defense += ddef
+            self.power += dpow
+
+            return {"level up": [self.level, "+{0} HP, +{1} DEF, +{2} POW".format(dhp, ddef, dpow)]}
+
+        return {}
 
     def kill(self, tiles):
         """ Do any necessary preparations to kill off the player and present the game over screen. """

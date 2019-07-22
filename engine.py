@@ -189,7 +189,11 @@ def main():
                 dead_attacker.kill(game_map.tiles)
 
                 message_log.add_message(Message("{0} XP granted".format(dead_attacker.xp)))
-                player.add_xp(dead_attacker.xp)
+                level_up = player.add_xp(dead_attacker.xp).get("level up")
+
+                if level_up:
+                    message_log.add_message(Message("You reached level {0}".format(level_up[0])))
+                    message_log.add_message(Message(level_up[1]))
                 entities.remove(dead_attacker)
 
             damaged_entity = result.get("damaged")
