@@ -164,23 +164,11 @@ def main():
             game_state = GameStates.PLAYER_TURN
 
         if regenerate:  # Properly generate a new game map
-            # Reinitialize the tile map
-            game_map = GameMap(map_width, map_height)
-
-            # Remove all entities except the player
-            entities.clear()
-            entities.append(player)
-
-            # Generate a new game map
-            generate_all(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs, max_npcs,
-                         colors, entities, floor_number)
-
-            # Reset the message log
-            message_log = MessageLog(message_x, message_width, message_height)
-
-            # Set up the fov_map for the new game map and recalculate it
-            fov_recalculate = True
-            fov_map = initialize_fov(game_map)
+            game_map, message_log, fov_recalculate, fov_map = regenerate_map(player, map_width, map_height, max_rooms,
+                                                                             min_room_size, max_room_size, min_npcs,
+                                                                             max_npcs, colors, entities, floor_number,
+                                                                             message_x,
+                                                                             message_width, message_height)
 
         # Handle the player turn results
         for result in player_turn_results:
@@ -252,6 +240,30 @@ def main():
                     message_log.add_message(Message(upgrade_used[1]))
                     upgrade_used[2].kill(game_map.tiles)
                     entities.remove(upgrade_used[2])
+
+
+def regenerate_map(player, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs,
+                   max_npcs, colors, entities, floor_number, message_x, message_width, message_height):
+    """ Fully resets the game without closing the window. """
+    # Reinitialize the tile map
+    game_map = GameMap(map_width, map_height)
+
+    # Remove all entities except the player
+    entities.clear()
+    entities.append(player)
+
+    # Generate a new game map
+    generate_all(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs, max_npcs,
+                 colors, entities, floor_number)
+
+    # Reset the message log
+    message_log = MessageLog(message_x, message_width, message_height)
+
+    # Set up the fov_map for the new game map and recalculate it
+    fov_recalculate = True
+    fov_map = initialize_fov(game_map)
+
+    return game_map, message_log, fov_recalculate, fov_map
 
 
 if __name__ == "__main__":
