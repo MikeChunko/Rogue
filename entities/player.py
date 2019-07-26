@@ -4,6 +4,7 @@
 
 # This file contains the attacker subclass representing the player character
 from entities.attacker import Attacker
+from entities.stairs import Stairs
 import tcod
 from game_states import GameStates
 
@@ -37,6 +38,8 @@ class Player(Attacker):
                 results = [{"damaged": [target.name, damage]}]
                 results.extend(target.take_damage(damage))
                 return results
+            if isinstance(target, Stairs):
+                return target.next_floor()
         return []
 
     def add_xp(self, dxp):

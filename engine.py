@@ -52,6 +52,8 @@ entities = []
 
 max_fps = 30
 
+floor_number = 1
+
 # Starts the game with several debug features when True
 debug = False
 
@@ -79,7 +81,7 @@ def main():
 
     # Generate the rest of the game map
     generate_all(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs, max_npcs, colors,
-                 entities)
+                 entities, floor_number)
 
     # Initialize user input
     key = tcod.Key()
@@ -171,7 +173,7 @@ def main():
 
             # Generate a new game map
             generate_all(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs, max_npcs,
-                         colors, entities)
+                         colors, entities, floor_number)
 
             # Reset the message log
             message_log = MessageLog(message_x, message_width, message_height)

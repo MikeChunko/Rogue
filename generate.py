@@ -8,6 +8,7 @@ from map_objects.rectangle import Rectangle
 from entities.attacker import Attacker
 from entities.health_potion import HealthPotion
 from entities.armor_upgrade import ArmorUpgrade
+from entities.stairs import Stairs
 from entities.entity import get_entity_at_location
 from random import randint
 
@@ -21,11 +22,11 @@ rooms = []
 
 
 def generate_all(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs, max_npcs,
-                 colors, entities):
+                 colors, entities, floor_number):
     """ Generate the whole game floor, rooms and entities included. """
     rooms.clear()
     make_map(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, entities)
-    create_entities(game_map, min_npcs, max_npcs, entities, colors)
+    create_entities(game_map, min_npcs, max_npcs, entities, colors, floor_number)
 
 
 def make_map(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, entities):
@@ -95,9 +96,11 @@ def create_tunnel(game_map, start, end, location, direction, entities):
                 game_map.tiles[location][y].block_sight = False
 
 
-def create_entities(game_map, min_npcs, max_npcs, entities, colors):
+def create_entities(game_map, min_npcs, max_npcs, entities, colors, floor_number):
     """ Generate [min_npcs, max_npcs] entities in every room.
         The entity may either be an enemy or an item. """
+    stairs_generated = False
+
     for room in rooms:
         for i in range(0, randint(min_npcs, max_npcs)):
             x = y = 0
@@ -107,12 +110,17 @@ def create_entities(game_map, min_npcs, max_npcs, entities, colors):
                 x = randint(room.x1 + 1, room.x2 - 1)
                 y = randint(room.y1 + 1, room.y2 - 1)
 
-            # 80% chance to spawn an enemy, 20% for an item
-            random_number = randint(0, 100)
-            if random_number < 80:
-                create_enemies(game_map, entities, colors, x, y)
+            # Generates the stairs in a room away from the player
+            if rooms[0] != room and not stairs_generated:
+                entities.append(Stairs(floor_number, game_map.tiles, x, y))
+                stairs_generated = True
             else:
-                create_items(game_map, entities, x, y)
+                # 80% chance to spawn an enemy, 20% for an item
+                random_number = randint(0, 100)
+                if random_number < 80:
+                    create_enemies(game_map, entities, colors, x, y)
+                else:
+                    create_items(game_map, entities, x, y)
 
 
 def create_enemies(game_map, entities, colors, x, y):
