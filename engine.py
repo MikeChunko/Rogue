@@ -45,7 +45,9 @@ colors = {
     "unseen": tcod.Color(20, 20, 30),
     "goblin": tcod.Color(10, 150, 10),
     "orc": tcod.Color(10, 130, 80),
-    "hp potion": tcod.Color(200, 10, 55)
+    "hp potion": tcod.Color(200, 10, 55),
+    "stairs": tcod.gray,
+    "player": tcod.white
 }
 
 entities = []
@@ -79,8 +81,8 @@ def main():
     game_map = GameMap(map_width, map_height)
 
     # Initialize the player and the entities list
-    player = Player(10, 0, 2, 10, 1, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player",
-                    True)
+    player = Player(10, 0, 2, 10, 1, game_map.tiles, screen_width // 2, screen_height // 2, '@', colors.get("player"),
+                    "player", True)
     entities.append(player)
 
     # Generate the rest of the game map
@@ -250,8 +252,8 @@ def main():
 def reset_map(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs,
               max_npcs, colors, entities, floor_number, message_x, message_width, message_height):
     """ Fully resets the game as a whole without closing the window. """
-    player = Player(10, 0, 2, 10, 1, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player",
-                    True)
+    player = Player(10, 0, 2, 10, 1, game_map.tiles, screen_width // 2, screen_height // 2, '@', colors.get("player"),
+                    "player", True)
     return player, GameStates.PLAYER_TURN, regenerate_map(player, map_width, map_height, max_rooms, min_room_size,
                                                           max_room_size, min_npcs, max_npcs, colors, entities,
                                                           floor_number, message_x, message_width, message_height)
