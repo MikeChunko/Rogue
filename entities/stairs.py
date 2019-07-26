@@ -15,3 +15,7 @@ class Stairs(Entity):
 
     def next_floor(self):
         return [{"next_floor": self.floor}]
+
+    # Ensures the stairs do not move
+    def take_turn(self, entities, fov_map, game_map):
+        pass
