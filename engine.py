@@ -58,6 +58,10 @@ floor_number = 1
 debug = False
 
 
+# TODO fully implement stairs (returns something like "You have ascended to floor 2", increments floor_number,
+#  generates new floor
+# TODO place unusable floor down ('\') on the spot where the player spawns on a new floor (only past floor 1)
+
 def main():
     # Limit the FPS
     tcod.sys_set_fps(max_fps)
@@ -153,15 +157,16 @@ def main():
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
 
         if reset:  # Reset the game
-            # Generate a new player
-            player = Player(10, 0, 2, 10, 1, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white,
-                            "player",
-                            True)
-
-            # Generate a new game map
-            regenerate = True
-
-            game_state = GameStates.PLAYER_TURN
+            player, game_state, regen_values = reset_map(game_map, map_width,
+                                                         map_height, max_rooms,
+                                                         min_room_size,
+                                                         max_room_size, min_npcs,
+                                                         max_npcs, colors, entities,
+                                                         floor_number,
+                                                         message_x,
+                                                         message_width,
+                                                         message_height)
+            game_map, message_log, fov_recalculate, fov_map = regen_values
 
         if regenerate:  # Properly generate a new game map
             game_map, message_log, fov_recalculate, fov_map = regenerate_map(player, map_width, map_height, max_rooms,
@@ -242,9 +247,19 @@ def main():
                     entities.remove(upgrade_used[2])
 
 
+def reset_map(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs,
+              max_npcs, colors, entities, floor_number, message_x, message_width, message_height):
+    """ Fully resets the game as a whole without closing the window. """
+    player = Player(10, 0, 2, 10, 1, game_map.tiles, screen_width // 2, screen_height // 2, '@', tcod.white, "player",
+                    True)
+    return player, GameStates.PLAYER_TURN, regenerate_map(player, map_width, map_height, max_rooms, min_room_size,
+                                                          max_room_size, min_npcs, max_npcs, colors, entities,
+                                                          floor_number, message_x, message_width, message_height)
+
+
 def regenerate_map(player, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs,
                    max_npcs, colors, entities, floor_number, message_x, message_width, message_height):
-    """ Fully resets the game without closing the window. """
+    """ Fully resets the game map without closing the window. """
     # Reinitialize the tile map
     game_map = GameMap(map_width, map_height)
 
