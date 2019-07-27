@@ -50,6 +50,9 @@ colors = {
     "player": tcod.white
 }
 
+# [hp, defense, power, max starting xp, starting level]
+player_stats = [10, 0, 2, 10, 1]
+
 entities = []
 
 max_fps = 30
@@ -60,6 +63,7 @@ floor_number = 1
 debug = False
 
 
+# TODO commit a readme update including the stairs in the guide
 # TODO fully implement stairs (returns something like "You have ascended to floor 2", increments floor_number,
 #  generates new floor
 # TODO place unusable floor down ('\') on the spot where the player spawns on a new floor (only past floor 1)
@@ -81,8 +85,8 @@ def main():
     game_map = GameMap(map_width, map_height)
 
     # Initialize the player and the entities list
-    player = Player(10, 0, 2, 10, 1, game_map.tiles, screen_width // 2, screen_height // 2, '@', colors.get("player"),
-                    "player", True)
+    player = Player(player_stats[0], player_stats[1], player_stats[2], player_stats[3], player_stats[4], game_map.tiles,
+                    screen_width // 2, screen_height // 2, '@', colors.get("player"), "player", True)
     entities.append(player)
 
     # Generate the rest of the game map
@@ -252,8 +256,8 @@ def main():
 def reset_map(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs,
               max_npcs, colors, entities, floor_number, message_x, message_width, message_height):
     """ Fully resets the game as a whole without closing the window. """
-    player = Player(10, 0, 2, 10, 1, game_map.tiles, screen_width // 2, screen_height // 2, '@', colors.get("player"),
-                    "player", True)
+    player = Player(player_stats[0], player_stats[1], player_stats[2], player_stats[3], player_stats[4], game_map.tiles,
+                    screen_width // 2, screen_height // 2, '@', colors.get("player"), "player", True)
     return player, GameStates.PLAYER_TURN, regenerate_map(player, map_width, map_height, max_rooms, min_room_size,
                                                           max_room_size, min_npcs, max_npcs, colors, entities,
                                                           floor_number, message_x, message_width, message_height)
