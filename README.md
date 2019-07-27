@@ -26,7 +26,8 @@ r: Reset the game
 g: A goblin; the most basic enemy\
 O: An orc; considerably stronger than a goblin\
 !: A health potion\
-\*: An Armor upgrade
+\*: An Armor upgrade\
+/: A staircase. Walk into it to advance to the next floor
 
 
 # Licensing
