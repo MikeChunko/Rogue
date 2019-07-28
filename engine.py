@@ -57,16 +57,9 @@ entities = []
 
 max_fps = 30
 
-floor_number = 1
-
 # Starts the game with several debug features when True
-debug = False
+debug = True
 
-
-# TODO commit a readme update including the stairs in the guide
-# TODO fully implement stairs (returns something like "You have ascended to floor 2", increments floor_number,
-#  generates new floor
-# TODO place unusable floor down ('\') on the spot where the player spawns on a new floor (only past floor 1)
 
 def main():
     # Limit the FPS
@@ -88,6 +81,9 @@ def main():
     player = Player(player_stats[0], player_stats[1], player_stats[2], player_stats[3], player_stats[4], game_map.tiles,
                     screen_width // 2, screen_height // 2, '@', colors.get("player"), "player", True)
     entities.append(player)
+
+    # Represents the current dungeon floor
+    floor_number = 1
 
     # Generate the rest of the game map
     generate_all(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs, max_npcs, colors,
@@ -163,23 +159,16 @@ def main():
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
 
         if reset:  # Reset the game
-            player, game_state, regen_values = reset_map(game_map, map_width,
-                                                         map_height, max_rooms,
-                                                         min_room_size,
-                                                         max_room_size, min_npcs,
-                                                         max_npcs, colors, entities,
-                                                         floor_number,
-                                                         message_x,
-                                                         message_width,
-                                                         message_height)
-            game_map, message_log, fov_recalculate, fov_map = regen_values
+            player, game_state, regen_values = reset_map(game_map, map_width, map_height, max_rooms, min_room_size,
+                                                         max_room_size, min_npcs, max_npcs, colors, entities, message_x,
+                                                         message_width, message_height)
+            game_map, fov_recalculate, fov_map, message_log = regen_values
 
         if regenerate:  # Properly generate a new game map
-            game_map, message_log, fov_recalculate, fov_map = regenerate_map(player, map_width, map_height, max_rooms,
+            game_map, fov_recalculate, fov_map, message_log = regenerate_map(player, map_width, map_height, max_rooms,
                                                                              min_room_size, max_room_size, min_npcs,
                                                                              max_npcs, colors, entities, floor_number,
-                                                                             message_x,
-                                                                             message_width, message_height)
+                                                                             message_x, message_width, message_height)
 
         # Handle the player turn results
         for result in player_turn_results:
@@ -209,6 +198,18 @@ def main():
                 message_log.add_message(Message(pickup_used[0]))
                 if pickup_used[1].deletes:
                     pickup_used[1].delete(player)
+
+            next_floor = result.get("next_floor")
+
+            if next_floor:
+                message_log.add_message(Message("You have advanced to floor {0}".format(next_floor + 1)))
+                floor_number += 1
+                game_map, fov_recalculate, fov_map, null = regenerate_map(player, map_width, map_height,
+                                                                          max_rooms, min_room_size,
+                                                                          max_room_size, min_npcs, max_npcs,
+                                                                          colors, entities, floor_number,
+                                                                          message_x, message_width,
+                                                                          message_height, preserve_messages=True)
 
         # Enemy turn (really every entity that is not the player)
         if game_state == GameStates.ENEMY_TURN:
@@ -254,8 +255,9 @@ def main():
 
 
 def reset_map(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs,
-              max_npcs, colors, entities, floor_number, message_x, message_width, message_height):
+              max_npcs, colors, entities, message_x, message_width, message_height):
     """ Fully resets the game as a whole without closing the window. """
+    floor_number = 1
     player = Player(player_stats[0], player_stats[1], player_stats[2], player_stats[3], player_stats[4], game_map.tiles,
                     screen_width // 2, screen_height // 2, '@', colors.get("player"), "player", True)
     return player, GameStates.PLAYER_TURN, regenerate_map(player, map_width, map_height, max_rooms, min_room_size,
@@ -264,7 +266,8 @@ def reset_map(game_map, map_width, map_height, max_rooms, min_room_size, max_roo
 
 
 def regenerate_map(player, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs,
-                   max_npcs, colors, entities, floor_number, message_x, message_width, message_height):
+                   max_npcs, colors, entities, floor_number, message_x, message_width, message_height,
+                   preserve_messages=False):
     """ Fully resets the game map without closing the window. """
     # Reinitialize the tile map
     game_map = GameMap(map_width, map_height)
@@ -278,13 +281,16 @@ def regenerate_map(player, map_width, map_height, max_rooms, min_room_size, max_
                  colors, entities, floor_number)
 
     # Reset the message log
-    message_log = MessageLog(message_x, message_width, message_height)
+    if not preserve_messages:
+        message_log = MessageLog(message_x, message_width, message_height)
+    else:
+        message_log = None
 
     # Set up the fov_map for the new game map and recalculate it
     fov_recalculate = True
     fov_map = initialize_fov(game_map)
 
-    return game_map, message_log, fov_recalculate, fov_map
+    return game_map, fov_recalculate, fov_map, message_log
 
 
 if __name__ == "__main__":
