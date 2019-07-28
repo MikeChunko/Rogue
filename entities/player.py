@@ -47,7 +47,7 @@ class Player(Attacker):
         self.xp += dxp
 
         # Level up
-        if self.xp > self.max_xp:
+        if self.xp >= self.max_xp:
             self.xp -= self.max_xp
             self.max_xp += 5
             self.level += 1
