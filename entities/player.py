@@ -53,13 +53,15 @@ class Player(Attacker):
             self.level += 1
 
             # Apply stat increases
-            dhp, ddef, dpow = level_bonus.get(self.level)
-            self.hp += dhp
-            self.max_hp += dhp
-            self.defense += ddef
-            self.power += dpow
-
-            return {"level up": [self.level, "+{0} HP, +{1} DEF, +{2} POW".format(dhp, ddef, dpow)]}
+            if level_bonus.get(self.level):
+                dhp, ddef, dpow = level_bonus.get(self.level)
+                self.hp += dhp
+                self.max_hp += dhp
+                self.defense += ddef
+                self.power += dpow
+                return {"level up": [self.level, "+{0} HP, +{1} DEF, +{2} POW".format(dhp, ddef, dpow)]}
+            else:
+                return {"level up": [self.level, "Your stats have not changed"]}
 
         return {}
 
