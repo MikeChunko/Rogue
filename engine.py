@@ -164,7 +164,7 @@ def main():
                                                          message_width, message_height)
             game_map, fov_recalculate, fov_map, message_log = regen_values
 
-        if regenerate:  # Properly generate a new game map
+        if regenerate and debug:  # Properly generate a new game map
             game_map, fov_recalculate, fov_map, message_log = regenerate_map(player, map_width, map_height, max_rooms,
                                                                              min_room_size, max_room_size, min_npcs,
                                                                              max_npcs, colors, entities, floor_number,
