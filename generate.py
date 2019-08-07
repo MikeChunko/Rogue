@@ -12,7 +12,7 @@ from entities.stairs import Stairs
 from entities.entity import get_entity_at_location
 from random import randint
 
-# (hp, defense, power, xp worth)
+# (hp, defense, power, xp value)
 monster_stats = {
     "orc": (5, 1, 2, 3),
     "goblin": (3, 0, 1, 1)
@@ -72,7 +72,7 @@ def make_map(game_map, map_width, map_height, max_rooms, min_room_size, max_room
 
 def create_room(game_map, room):
     """ Make the tiles in a room unblocked and see-through.
-        The "+ 1" is because (x1, y1) should be a wall. """
+        The "+ 1" is because (x_1, y_1) should be a wall. """
     for x in range(room.x1 + 1, room.x2):
         for y in range(room.y1 + 1, room.y2):
             game_map.tiles[x][y].blocked = False

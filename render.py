@@ -85,7 +85,7 @@ def clear_entity(con, entity):
 
 
 def render_bar(panel, x, y, total_width, name, value, maximum, foreground_color, background_color):
-    """ Render a "bar" (HP, XP, etc.). """
+    """ Render a bar (HP, XP, etc.). """
     bar_width = int((value / maximum) * total_width)
 
     # Going to be honest, don't know why it has to be done this way
