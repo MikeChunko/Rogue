@@ -139,9 +139,9 @@ def create_enemies(game_map, entities, colors, x, y):
 
 def create_items(game_map, entities, x, y):
     """ Generate an item at the given (x, y) coordinate. """
-    # 85% chance for a HP potion, 15% for an armor upgrade
+    # 95% chance for a HP potion, 5% for an armor upgrade
     random_number = randint(0, 100)
-    if random_number < 85:  # HP potion
+    if random_number < 95:  # HP potion
         entities.append(HealthPotion(game_map.tiles, x, y))
     else:  # armor upgrade
         entities.append(ArmorUpgrade(game_map.tiles, x, y))
