@@ -10,7 +10,7 @@ import tcod
 
 class ArmorUpgrade(Pickup):
     def __init__(self, tiles, x=1, y=1, char='*', color=tcod.light_blue, name="armor upgrade", blocks=False,
-                 moves=False, deletes=True, stat_increase=1):
+                 moves=False, deletes=True, stat_increase=0.5):
         Pickup.__init__(self, tiles, x, y, char, color, name, blocks, moves, deletes)
         self.stat_increase = stat_increase
 
