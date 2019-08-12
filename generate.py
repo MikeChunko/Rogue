@@ -20,6 +20,9 @@ monster_stats = {
 
 rooms = []
 
+# Used for changing the enemy spawn rates based on current floor
+floor_spawn_rates_offset = 5
+
 
 def generate_all(game_map, map_width, map_height, max_rooms, min_room_size, max_room_size, min_npcs, max_npcs,
                  colors, entities, floor_number):
@@ -118,16 +121,20 @@ def create_entities(game_map, min_npcs, max_npcs, entities, colors, floor_number
                 # 80% chance to spawn an enemy, 20% for an item
                 random_number = randint(0, 100)
                 if random_number < 80:
-                    create_enemies(game_map, entities, colors, x, y)
+                    create_enemies(game_map, entities, colors, floor_number - 1, x, y)
                 else:
                     create_items(game_map, entities, x, y)
 
 
-def create_enemies(game_map, entities, colors, x, y):
-    """ Generate an enemy at the given (x, y) coordinate. """
-    # 85% chance for a goblin, 15% for an orc
+def create_enemies(game_map, entities, colors, floor_number, x, y):
+    """ Generate an enemy at the given (x, y) coordinate.
+        For this method, floor numbers start at 0 (actual floor number - 1). """
+    # Default: 85% chance for a goblin, 15% for an orc
+    goblin_chance = 85 - (floor_number * floor_spawn_rates_offset)
+    orc_chance = 100 - goblin_chance
+
     random_number = randint(0, 100)
-    if random_number < 85:  # goblin
+    if random_number < goblin_chance:  # goblin
         hp, defense, power, xp = monster_stats.get("goblin")
         entities.append(
             Attacker(hp, defense, power, xp, game_map.tiles, x, y, "g", colors.get("goblin"), "goblin"))
